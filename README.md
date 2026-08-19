@@ -1,5 +1,3 @@
-# My Life OS v1.0 Clean
-Clean stability rebuild. No service worker in this build to prevent stale GitHub Pages caches.
+# My Life OS v1.1
 
-## GitHub Pages
-Upload all files to repository root, replacing the old app files. Pages source: main / (root).
+Routine + Habit functional build. Local-first, no service worker while stabilizing.
