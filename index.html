@@ -3,616 +3,333 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
-<meta name="theme-color" content="#faf8f3">
-<title>My Life OS v0.3</title>
+<meta name="theme-color" content="#FBF8F2">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="My Life OS">
 <link rel="apple-touch-icon" href="icons/icon-180.png">
 <link rel="manifest" href="manifest.webmanifest">
-<link rel="manifest" href="manifest.webmanifest">
+<title>My Life OS v0.4</title>
 <style>
-:root{
-  --bg:#faf8f3;--panel:#fffdfa;--text:#22211f;--muted:#8a857d;--line:#e9e4dc;
-  --accent:#7f8a6d;--accent-2:#ece8dd;--danger:#b66a61;--shadow:0 6px 24px rgba(67,61,50,.05);
-  --radius:20px;
-}
-*{box-sizing:border-box} html,body{margin:0;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Helvetica Neue",Arial,sans-serif}
-body{min-height:100vh} button,input,textarea,select{font:inherit}
-.app{max-width:430px;margin:0 auto;min-height:100vh;padding:env(safe-area-inset-top) 16px calc(92px + env(safe-area-inset-bottom))}
-.topbar{display:flex;align-items:center;justify-content:space-between;padding:14px 2px 6px}
-.iconbtn{border:0;background:transparent;font-size:22px;color:var(--text);padding:8px}
-h1{font-size:36px;line-height:1.1;margin:12px 0 4px;letter-spacing:-1px}
-.sub{color:var(--muted);font-size:14px;margin-bottom:22px}
-.section{margin:16px 0}
-.section-title{display:flex;justify-content:space-between;align-items:center;font-size:13px;letter-spacing:.08em;color:var(--muted);text-transform:uppercase;margin:0 4px 8px}
-.card{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:16px;box-shadow:var(--shadow)}
-.row{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 0}
-.row+.row{border-top:1px solid var(--line)}
-.left{display:flex;align-items:center;gap:10px;min-width:0}
-.check{width:22px;height:22px;border:1.5px solid #bbb4aa;border-radius:50%;display:inline-grid;place-items:center;flex:0 0 auto;background:#fff}
-.check.done{background:var(--accent);border-color:var(--accent);color:white}
-.check.done:after{content:"✓";font-size:14px}
-.muted{color:var(--muted);font-size:13px}
-.badge{background:var(--accent-2);padding:6px 10px;border-radius:999px;font-size:12px;color:#686258}
-.progress{height:5px;background:#ece8e1;border-radius:999px;overflow:hidden;margin:12px 0 8px}
-.progress>span{display:block;height:100%;background:var(--accent);width:40%}
-.plan-text{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.focus-link{border:0;background:#f2eee6;border-radius:999px;padding:7px 10px;color:#5d5a51}
-.hint{display:flex;align-items:center;justify-content:space-between;padding:12px 0}
-.hint+.hint{border-top:1px solid var(--line)}
-.quickadd{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(74px + env(safe-area-inset-bottom));width:min(398px,calc(100vw - 24px));background:rgba(255,253,250,.98);backdrop-filter:blur(18px);border:1px solid var(--line);border-radius:26px;padding:14px;box-shadow:0 18px 50px rgba(50,44,34,.18);display:none;z-index:30}
-.quickadd.show{display:block}
-.quick-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
-.qitem{border:1px solid var(--line);background:#fff;border-radius:16px;padding:12px 8px;text-align:center}
-.qitem .emo{font-size:22px;display:block;margin-bottom:5px}
-.sheet{position:fixed;inset:0;background:rgba(25,23,20,.22);display:none;z-index:40;align-items:flex-end;justify-content:center}
-.sheet.show{display:flex}
-.sheet-card{width:min(430px,100vw);max-height:82vh;overflow:auto;background:var(--panel);border-radius:28px 28px 0 0;padding:18px 18px calc(24px + env(safe-area-inset-bottom));box-shadow:0 -20px 60px rgba(0,0,0,.12)}
-.sheet-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
-.sheet-head h2{margin:0;font-size:20px}
-.field{margin:14px 0}.field label{display:block;font-size:13px;color:var(--muted);margin-bottom:6px}
-.field input,.field textarea,.field select{width:100%;border:1px solid var(--line);border-radius:14px;background:#fff;padding:12px;color:var(--text);outline:none}
-.field textarea{min-height:96px;resize:vertical}
-.primary{width:100%;border:0;border-radius:16px;padding:13px;background:var(--text);color:white;font-weight:600}
-.secondary{width:100%;border:1px solid var(--line);border-radius:16px;padding:12px;background:#fff;color:var(--text)}
-.nav{position:fixed;left:50%;transform:translateX(-50%);bottom:0;width:min(430px,100vw);padding:8px 10px calc(8px + env(safe-area-inset-bottom));display:grid;grid-template-columns:repeat(5,1fr);background:rgba(250,248,243,.94);backdrop-filter:blur(18px);border-top:1px solid var(--line);z-index:20}
-.nav button{border:0;background:transparent;color:var(--muted);font-size:11px;padding:6px 0}
-.nav button.active{color:var(--text);font-weight:600}
-.nav .plus{width:50px;height:50px;margin:-20px auto 0;border-radius:50%;background:var(--text);color:white;font-size:28px;box-shadow:0 8px 20px rgba(0,0,0,.16)}
+:root{--bg:#FBF8F2;--surface:#FFFDF9;--text:#26251F;--muted:#8C877E;--line:#E8E2D9;--accent:#8D967A;--soft:#EEF0E9;--warm:#F1EAE0;--danger:#B66B63;--radius:19px;--shadow:0 8px 28px rgba(56,48,38,.055)}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC","Helvetica Neue",Arial,sans-serif}
+body{min-height:100vh}button,input,textarea,select{font:inherit}button{cursor:pointer}
+.app{max-width:430px;margin:auto;min-height:100vh;padding:env(safe-area-inset-top) 16px calc(98px + env(safe-area-inset-bottom))}
 .view{display:none}.view.active{display:block}
-.calendar{display:grid;grid-template-columns:repeat(7,1fr);gap:8px;font-size:13px;text-align:center}
-.calendar .dow{color:var(--muted);font-size:11px}
-.day{padding:8px 0;border-radius:12px;position:relative}
-.day.today{background:var(--text);color:white}
-.day.dot:after{content:"";position:absolute;left:50%;bottom:2px;transform:translateX(-50%);width:4px;height:4px;background:var(--accent);border-radius:50%}
-.life-item{padding:14px 0}.life-item+.life-item{border-top:1px solid var(--line)}
-.life-time{font-size:12px;color:var(--muted);margin-bottom:6px}
-.photo{width:100%;height:150px;border-radius:16px;background:linear-gradient(135deg,#e8e1d5,#f5f0e7);display:grid;place-items:center;color:#9a9288;margin-top:8px}
-.archive-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
-.stat{background:#fff;border:1px solid var(--line);border-radius:16px;padding:14px}
-.stat strong{display:block;font-size:22px;margin-top:4px}
-.float-focus{position:fixed;right:max(18px,calc((100vw - 430px)/2 + 18px));bottom:calc(88px + env(safe-area-inset-bottom));z-index:25;background:var(--text);color:white;border:0;border-radius:999px;padding:10px 14px;box-shadow:0 8px 24px rgba(0,0,0,.18);display:none}
-.float-focus.show{display:block}
-.small{font-size:12px}.hidden{display:none}
-.anniv-card{display:flex;align-items:center;justify-content:space-between;gap:12px}
-.anniv-main{min-width:0}.anniv-title{font-weight:600;margin-bottom:3px}.anniv-meta{font-size:12px;color:var(--muted)}
-.countdown{font-size:12px;background:#f3eee6;border-radius:999px;padding:7px 9px;white-space:nowrap}
-.segmented{display:flex;gap:6px;background:#f1ede6;padding:4px;border-radius:14px}
-.segmented button{flex:1;border:0;background:transparent;border-radius:10px;padding:8px;color:var(--muted)}
-.segmented button.active{background:#fff;color:var(--text);box-shadow:0 2px 8px rgba(0,0,0,.05)}
-
-hr{border:0;border-top:1px solid var(--line);margin:14px 0}
-
-.photo-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:10px}
-.photo-thumb{aspect-ratio:1/1;border-radius:14px;overflow:hidden;background:#eee8de}
-.photo-thumb img{width:100%;height:100%;object-fit:cover;display:block}
-.photo-large{width:100%;border-radius:16px;margin-top:10px;display:block;max-height:380px;object-fit:cover}
-.mood-row{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
-.mood-btn{border:1px solid var(--line);background:#fff;border-radius:14px;padding:10px 6px;text-align:center}
-.mood-btn .mood-emo{font-size:24px;display:block;margin-bottom:4px}
-.menu-row{min-height:52px}
-.tap{cursor:pointer}
-.section-note{font-size:12px;color:var(--muted);line-height:1.5}
+.topbar{height:48px;display:flex;align-items:center;justify-content:space-between}
+.iconbtn{border:0;background:transparent;color:var(--text);font-size:21px;padding:8px 4px}
+h1{font-size:34px;line-height:1.06;letter-spacing:-1px;margin:10px 0 5px}h2{margin:0}
+.sub{font-size:14px;color:var(--muted);margin-bottom:18px}.muted{color:var(--muted);font-size:13px}
+.section{margin:18px 0}.section-title{display:flex;align-items:center;justify-content:space-between;padding:0 3px 8px;font-size:12px;letter-spacing:.075em;color:var(--muted);text-transform:uppercase}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:15px;box-shadow:var(--shadow)}
+.row{min-height:47px;display:flex;align-items:center;justify-content:space-between;gap:12px}.row+.row{border-top:1px solid var(--line)}
+.left{display:flex;align-items:center;gap:10px;min-width:0}.grow{flex:1;min-width:0}
+.badge,.pill{display:inline-flex;align-items:center;border-radius:999px;padding:6px 9px;font-size:12px}.badge{background:var(--soft);color:#626956}.pill{background:var(--warm);color:#665F54}
+.action{border:0;background:var(--warm);border-radius:999px;padding:8px 11px;font-size:12px;color:var(--text)}
+.primary,.secondary,.danger{width:100%;border-radius:15px;padding:13px;font-weight:650}
+.primary{border:0;background:var(--text);color:#fff}.secondary{border:1px solid var(--line);background:#fff;color:var(--text)}.danger{border:1px solid #ead3d0;background:#fff5f3;color:var(--danger)}
+.check{width:23px;height:23px;border-radius:50%;border:1.5px solid #B8B1A7;background:#fff;display:grid;place-items:center;flex:0 0 auto}.check.done{background:var(--accent);border-color:var(--accent);color:#fff}.check.done::after{content:"✓";font-size:14px}
+.progress{height:5px;background:#ECE7DE;border-radius:999px;overflow:hidden;margin:11px 0 7px}.progress span{height:100%;display:block;background:var(--accent)}
+.nav{position:fixed;z-index:30;left:50%;transform:translateX(-50%);bottom:0;width:min(430px,100vw);display:grid;grid-template-columns:repeat(5,1fr);padding:9px 9px calc(8px + env(safe-area-inset-bottom));background:rgba(251,248,242,.95);backdrop-filter:blur(18px);border-top:1px solid var(--line)}
+.nav button{border:0;background:transparent;color:var(--muted);font-size:11px;padding:5px 0}.nav button.active{color:var(--text);font-weight:700}.nav .plus{width:52px;height:52px;border-radius:50%;margin:-22px auto 0;background:var(--text);color:#fff;font-size:29px;box-shadow:0 9px 22px rgba(0,0,0,.16)}
+.quickadd{position:fixed;z-index:35;left:50%;transform:translateX(-50%);bottom:calc(76px + env(safe-area-inset-bottom));width:min(398px,calc(100vw - 24px));background:rgba(255,253,249,.98);backdrop-filter:blur(18px);border:1px solid var(--line);border-radius:25px;padding:14px;box-shadow:0 18px 55px rgba(45,40,32,.18);display:none}.quickadd.show{display:block}
+.quick-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:9px}.qitem{min-height:72px;border:1px solid var(--line);background:#fff;border-radius:15px;color:var(--text);padding:9px 6px;text-align:center}.qitem span{display:block;font-size:21px;margin-bottom:4px}
+.sheet{position:fixed;z-index:50;inset:0;background:rgba(30,27,23,.25);display:none;align-items:flex-end;justify-content:center}.sheet.show{display:flex}.sheet-card{width:min(430px,100vw);max-height:88vh;overflow:auto;background:var(--surface);border-radius:27px 27px 0 0;padding:18px 18px calc(25px + env(safe-area-inset-bottom));box-shadow:0 -20px 60px rgba(0,0,0,.12)}
+.sheet-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}.sheet-head h2{font-size:21px}.field{margin:13px 0}.field label{display:block;color:var(--muted);font-size:13px;margin-bottom:6px}.field input,.field textarea,.field select{width:100%;border:1px solid var(--line);border-radius:13px;background:#fff;color:var(--text);padding:12px;outline:none}.field textarea{min-height:96px;resize:vertical}.two{display:grid;grid-template-columns:1fr 1fr;gap:10px}.three{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.segment{display:flex;background:#F1ECE4;padding:4px;border-radius:13px;gap:4px}.segment button{flex:1;border:0;background:transparent;border-radius:10px;padding:8px 5px;color:var(--muted);font-size:12px}.segment button.active{background:#fff;color:var(--text);font-weight:650}
+.calendar{display:grid;grid-template-columns:repeat(7,1fr);gap:5px;text-align:center}.dow{font-size:10px;color:var(--muted);padding-bottom:3px}.day{min-height:48px;padding:6px 2px;border-radius:11px;position:relative;font-size:12px}.day .dots{display:flex;justify-content:center;gap:2px;margin-top:4px}.dot{width:4px;height:4px;border-radius:50%;background:var(--accent)}.day.today{outline:1.5px solid var(--accent)}.day.selected{background:var(--text);color:#fff}.day.selected .dot{background:#fff}
+.photo-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-top:10px}.photo-thumb{aspect-ratio:1;border-radius:13px;overflow:hidden;background:#eee7dd}.photo-thumb img,.life-photo,.receipt-photo{width:100%;height:100%;object-fit:cover;display:block}.life-photo{height:auto;max-height:390px;border-radius:15px;margin-top:10px}.receipt-photo{height:auto;max-height:330px;border-radius:14px;margin-top:10px}
+.life-item{padding:15px 0}.life-item+.life-item{border-top:1px solid var(--line)}.life-time{font-size:12px;color:var(--muted);margin-bottom:6px}.tag{display:inline-block;background:#F1ECE4;border-radius:999px;padding:5px 8px;font-size:11px;margin:6px 4px 0 0}.location{font-size:12px;color:var(--muted);margin-top:7px}
+.stats{display:grid;grid-template-columns:repeat(2,1fr);gap:9px}.stat{background:#fff;border:1px solid var(--line);border-radius:15px;padding:13px}.stat strong{font-size:22px;display:block;margin:3px 0}
+.mood-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}.moodbtn{border:1px solid var(--line);background:#fff;border-radius:14px;padding:10px 4px;text-align:center}.moodbtn.active{background:var(--soft);border-color:#C9D0BD}.moodbtn b{display:block;font-size:24px;margin-bottom:3px}
+.focus-float{position:fixed;z-index:38;right:max(15px,calc((100vw - 430px)/2 + 15px));bottom:calc(91px + env(safe-area-inset-bottom));display:none;border:0;border-radius:999px;background:var(--text);color:#fff;padding:11px 14px;box-shadow:0 10px 28px rgba(0,0,0,.18)}.focus-float.show{display:block}
+.bar-chart{display:flex;align-items:flex-end;gap:6px;height:120px;padding:10px 0}.bar-wrap{flex:1;text-align:center;font-size:9px;color:var(--muted)}.bar{width:100%;min-height:3px;background:var(--accent);border-radius:6px 6px 2px 2px;margin-bottom:5px}
+.empty{padding:16px 4px;color:var(--muted);text-align:center;font-size:13px}.note{font-size:12px;color:var(--muted);line-height:1.55}.title-sm{font-weight:700}.divider{height:1px;background:var(--line);margin:13px 0}.hidden{display:none}
+.toast{position:fixed;z-index:90;left:50%;transform:translateX(-50%);bottom:calc(108px + env(safe-area-inset-bottom));background:#292722;color:#fff;padding:10px 14px;border-radius:999px;font-size:13px;opacity:0;pointer-events:none;transition:.2s}.toast.show{opacity:1}
 </style>
 </head>
 <body>
 <div class="app">
-  <section id="today" class="view active">
-    <div class="topbar"><button class="iconbtn" onclick="openMySpace()">☰</button><button class="iconbtn" onclick="switchView('plan')">⌗</button></div>
-    <h1>Today</h1>
-    <div class="sub" id="todayDate"></div>
+<section id="today" class="view active">
+  <div class="topbar"><button class="iconbtn" onclick="openMySpace()">☰</button><button class="iconbtn" onclick="openBackup()">⋯</button></div>
+  <h1>Today</h1><div id="todayDate" class="sub"></div>
+  <div class="section"><div class="section-title"><span>My Day</span><span id="routineDayBadge" class="badge">今天</span></div><div id="todayRoutine" class="card"></div></div>
+  <div class="section"><div class="section-title"><span>今日计划</span><span id="todayPlanCount"></span></div><div id="todayPlans" class="card"></div></div>
+  <div class="section"><div class="section-title"><span>Habit</span><span>今天</span></div><div id="todayHabits" class="card"></div></div>
+  <div class="section"><div class="section-title"><span>Mood</span><span>今日代表心情</span></div><div class="card"><div class="row"><div><strong id="todayMoodText">还没记录</strong><div class="muted">点右边打卡，可修改</div></div><button class="action" onclick="openMood()">打卡</button></div></div></div>
+  <div class="section"><div class="section-title"><span>轻提醒</span><span></span></div><div id="todayReminders" class="card"></div></div>
+</section>
 
-    <div class="section">
-      <div class="section-title"><span>My Day</span><span class="badge">上班日</span></div>
-      <div class="card">
-        <div class="row"><div><strong>Morning</strong><div class="muted">现在 · 进行中</div></div><div class="badge">2 / 5</div></div>
-        <div class="progress"><span></span></div>
-        <div class="row"><div><div class="muted">下一步</div><strong>晨间护肤</strong></div><button class="focus-link" onclick="openRoutine()">继续 ›</button></div>
-      </div>
-    </div>
+<section id="plan" class="view">
+ <div class="topbar"><button class="iconbtn" onclick="changeMonth(-1)">‹</button><button class="iconbtn" onclick="openPlanForm()">＋</button></div>
+ <h1>Plan</h1><div class="sub">月视图 · 计划 · Plan Pool · 纪念日</div>
+ <div class="card">
+   <div class="row"><button class="iconbtn" onclick="changeMonth(-1)">‹</button><strong id="monthTitle"></strong><button class="iconbtn" onclick="changeMonth(1)">›</button></div>
+   <div id="monthCalendar" class="calendar"></div>
+ </div>
+ <div class="section"><div class="section-title"><span id="selectedDateTitle">所选日期</span><span></span></div><div id="selectedDatePlans" class="card"></div></div>
+ <div class="section"><div class="section-title"><span>Plan Pool</span><span id="poolCount"></span></div><div id="planPool" class="card"></div></div>
+ <div class="section"><div class="section-title"><span>Anniversary</span><span id="annivCount"></span></div><div id="annivList" class="card"></div></div>
+</section>
 
-    <div class="section">
-      <div class="section-title"><span>今日计划</span><span id="planCount">0 / 0</span></div>
-      <div class="card" id="todayPlans"></div>
-    </div>
+<section id="life" class="view">
+ <div class="topbar"><button class="iconbtn" onclick="openMySpace()">☰</button><button class="iconbtn" onclick="openLifeForm()">＋</button></div>
+ <h1>Life</h1><div class="sub">私人生活流 · 文字 · 照片 · 地点 · 标签</div>
+ <div class="segment" style="margin-bottom:15px"><button id="lifeTabTimeline" class="active" onclick="setLifeMode('timeline')">Timeline</button><button id="lifeTabPhotos" onclick="setLifeMode('photos')">Photos</button><button id="lifeTabDrinks" onclick="setLifeMode('drinks')">Drinks</button></div>
+ <div id="lifeFeed"></div>
+</section>
 
-    <div class="section">
-      <div class="section">
-      <div class="section-title"><span>Mood</span><span>今天的感觉</span></div>
-      <div class="card">
-        <div class="row">
-          <div><strong id="todayMoodLabel">还没记录今日心情</strong><div class="muted">即时心情 · 可多次记录</div></div>
-          <button class="action-pill" onclick="openMood()">打卡</button>
-        </div>
-      </div>
-    </div>
-    <div class="section-title"><span>今天</span><span>轻提醒</span></div>
-      <div class="card">
-        <div id="todayAnniversary"></div>
-        <div class="hint"><span>📖 阅读</span><span class="muted">未完成</span></div>
-        <div class="hint"><span>🏃 运动</span><span class="muted">本周 2 / 3</span></div>
-        <div class="hint"><span>🧖 面膜</span><span class="muted">距上次 3 天 · 建议今天</span></div>
-      </div>
-    </div>
-  </section>
-
-  <section id="plan" class="view">
-    <div class="topbar"><button class="iconbtn" onclick="switchView('today')">‹</button><button class="iconbtn" onclick="openAdd('plan')">＋</button></div>
-    <h1>Plan</h1>
-    <div class="sub">日历 + 列表</div>
-    <div class="card">
-      <div class="row"><strong id="monthLabel"></strong><span class="muted">月视图</span></div>
-      <div class="calendar" id="calendar"></div>
-    </div>
-    <div class="section">
-      <div class="section-title"><span>今天</span><span id="planListCount"></span></div>
-      <div class="card" id="planList"></div>
-    </div>
-    <div class="section">
-      <div class="section-title"><span>Anniversary</span><span id="anniversaryCount">0</span></div>
-      <div class="card" id="anniversaryPreview"></div>
-    </div>
-
-    <div class="section">
-      <div class="section-title"><span>Plan Pool</span><span id="planPoolCount">0</span></div>
-      <div class="card" id="planPoolList"></div>
-    </div>
-    </div>
-  </section>
-
-  <section id="life" class="view">
-    <div class="topbar"><button class="iconbtn">☰</button><button class="iconbtn" onclick="openAdd('life')">＋</button></div>
-    <h1>Life</h1>
-    <div class="sub">私人生活流</div>
-    <div id="lifeFeed"></div>
-  </section>
-
-  <section id="archive" class="view">
-    <div class="topbar"><button class="iconbtn">‹</button><button class="iconbtn">⌕</button></div>
-    <h1>Archive</h1>
-    <div class="sub">我的这个月</div>
-    <div class="archive-grid">
-      <div class="stat"><span class="muted">Life</span><strong id="lifeStat">0</strong><span class="muted">条记录</span></div>
-      <div class="stat"><span class="muted">Plan</span><strong id="planStat">0</strong><span class="muted">已完成</span></div>
-      <div class="stat"><span class="muted">Focus</span><strong id="focusStat">0m</strong><span class="muted">本月累计</span></div>
-      <div class="stat"><span class="muted">Drinks</span><strong id="drinkStat">0</strong><span class="muted">杯</span></div>
-      <div class="stat"><span class="muted">Anniversary</span><strong id="anniversaryStat">0</strong><span class="muted">个纪念日</span></div>
-    </div>
-    <div class="section">
-      <div class="section-title"><span>这个月</span><span>Mood</span></div>
-      <div class="card"><div style="font-size:28px;letter-spacing:8px">🙂 😌 😴 🙂 😊 😐 😌</div><div class="muted" style="margin-top:10px">先用极简摘要，后续再做完整月历。</div></div>
-    </div>
-  </section>
+<section id="archive" class="view">
+ <div class="topbar"><button class="iconbtn" onclick="archiveMonth(-1)">‹</button><button class="iconbtn" onclick="archiveMonth(1)">›</button></div>
+ <h1>Archive</h1><div id="archiveTitle" class="sub"></div>
+ <div id="archiveStats" class="stats"></div>
+ <div class="section"><div class="section-title"><span>本月照片</span><span id="archivePhotoCount"></span></div><div id="archivePhotos" class="card"></div></div>
+ <div class="section"><div class="section-title"><span>Mood</span><span>月度分布</span></div><div id="archiveMoods" class="card"></div></div>
+ <div class="section"><div class="section-title"><span>这个月的我</span><span></span></div><div class="card"><textarea id="monthNote" style="width:100%;min-height:100px;border:0;background:transparent;outline:none;resize:vertical" placeholder="写一点这个月的回顾……" onblur="saveMonthNote()"></textarea></div></div>
+</section>
 </div>
 
-<button id="floatFocus" class="float-focus" onclick="openRunningFocus()">⏱ <span id="floatTime">00:00</span></button>
+<button id="focusFloat" class="focus-float" onclick="openRunningFocus()">⏱ <span id="focusFloatTime">00:00</span></button>
 
 <div id="quickAdd" class="quickadd">
-  <div class="section-title" style="margin-bottom:10px"><span>快速添加</span><button class="iconbtn" style="font-size:18px" onclick="toggleQuickAdd()">×</button></div>
-  <div class="quick-grid">
-    <button class="qitem" onclick="openAdd('money')"><span class="emo">💰</span>记一笔</button>
-    <button class="qitem" onclick="openAdd('life')"><span class="emo">💭</span>记录</button>
-    <button class="qitem" onclick="openAdd('weight')"><span class="emo">⚖️</span>体重</button>
-    <button class="qitem" onclick="openAdd('plan')"><span class="emo">📅</span>计划</button>
-    <button class="qitem" onclick="openAdd('drink')"><span class="emo">🧋</span>饮品</button>
-    <button class="qitem" onclick="openAdd('focus')"><span class="emo">⏱</span>专注</button>
-    <button class="qitem" onclick="openAdd('anniversary')"><span class="emo">♡</span>纪念日</button>
-  </div>
+ <div class="section-title"><span>快速添加</span><button class="iconbtn" style="font-size:17px" onclick="toggleQuick()">×</button></div>
+ <div class="quick-grid">
+  <button class="qitem" onclick="openMoneyForm()"><span>💰</span>记一笔</button>
+  <button class="qitem" onclick="openLifeForm()"><span>💭</span>Life</button>
+  <button class="qitem" onclick="openWeightForm()"><span>⚖️</span>体重</button>
+  <button class="qitem" onclick="openPlanForm()"><span>📅</span>计划</button>
+  <button class="qitem" onclick="openDrinkForm()"><span>🧋</span>饮品</button>
+  <button class="qitem" onclick="openFocusForm()"><span>⏱</span>专注</button>
+  <button class="qitem" onclick="openMood()"><span>🙂</span>心情</button>
+  <button class="qitem" onclick="openExerciseForm()"><span>🏃</span>运动</button>
+  <button class="qitem" onclick="openSleepForm()"><span>🌙</span>睡眠</button>
+ </div>
 </div>
 
-<div id="sheet" class="sheet" onclick="if(event.target===this) closeSheet()">
-  <div class="sheet-card" id="sheetCard"></div>
-</div>
+<div id="sheet" class="sheet" onclick="if(event.target===this)closeSheet()"><div id="sheetCard" class="sheet-card"></div></div>
+<div id="toast" class="toast"></div>
 
 <nav class="nav">
-  <button data-view="today" class="active" onclick="switchView('today')">⌂<br>Today</button>
-  <button data-view="plan" onclick="switchView('plan')">▣<br>Plan</button>
-  <button class="plus" onclick="toggleQuickAdd()">＋</button>
-  <button data-view="life" onclick="switchView('life')">◌<br>Life</button>
-  <button data-view="archive" onclick="switchView('archive')">▤<br>Archive</button>
+ <button data-view="today" class="active" onclick="switchView('today')">⌂<br>Today</button>
+ <button data-view="plan" onclick="switchView('plan')">▣<br>Plan</button>
+ <button class="plus" onclick="toggleQuick()">＋</button>
+ <button data-view="life" onclick="switchView('life')">◌<br>Life</button>
+ <button data-view="archive" onclick="switchView('archive')">▤<br>Archive</button>
 </nav>
 
 <script>
-const PhotoDB={
-  db:null,
-  async open(){
-    if(this.db) return this.db;
-    this.db=await new Promise((resolve,reject)=>{
-      const req=indexedDB.open('MyLifeOSPhotos',1);
-      req.onupgradeneeded=()=>{if(!req.result.objectStoreNames.contains('photos')) req.result.createObjectStore('photos',{keyPath:'id'});};
-      req.onsuccess=()=>resolve(req.result); req.onerror=()=>reject(req.error);
-    });
-    return this.db;
-  },
-  async put(blob){
-    const db=await this.open(), id='p_'+Date.now()+'_'+Math.random().toString(36).slice(2);
-    return await new Promise((resolve,reject)=>{
-      const tx=db.transaction('photos','readwrite'); tx.objectStore('photos').put({id,blob});
-      tx.oncomplete=()=>resolve(id); tx.onerror=()=>reject(tx.error);
-    });
-  },
-  async get(id){
-    const db=await this.open();
-    return await new Promise((resolve,reject)=>{
-      const req=db.transaction('photos').objectStore('photos').get(id);
-      req.onsuccess=()=>resolve(req.result?.blob||null); req.onerror=()=>reject(req.error);
-    });
-  }
-};
-const photoUrls={};
-const store = {
-  get(k,d){try{return JSON.parse(localStorage.getItem(k)) ?? d}catch(e){return d}},
-  set(k,v){localStorage.setItem(k,JSON.stringify(v))}
-};
-let plans = store.get('plans', [
-  {id:1,title:'学习药理学',done:false,focus:true},
-  {id:2,title:'买日用品',done:false},
-  {id:3,title:'整理衣柜',done:false},
-  {id:4,title:'整理药盒',done:true}
-]);
-let life = store.get('life', [
-  {id:1,time:'09:16',text:'今天早上居然没那么困',type:'life'},
-  {id:2,time:'18:27',text:'下班看到的天空很好看。',type:'life'},
-  {id:3,time:'21:35',text:'霸王茶姬 · 伯牙绝弦 ★★★★☆',type:'drink',amount:18}
-]);
-let money = store.get('money', []);
-let weight = store.get('weight', []);
-let focus = store.get('focus', []);
-let planPool = store.get('planPool', [
-  {id:201,title:'洗牙'},{id:202,title:'整理旧照片'},{id:203,title:'买收纳盒'}
-]);
-let habits = store.get('habits', [
-  {id:301,title:'阅读',type:'fixed',done:false},
-  {id:302,title:'运动',type:'count',goal:3,count:2},
-  {id:303,title:'面膜',type:'flex',done:false}
-]);
-let routines = store.get('routines', [
-  {id:401,title:'Morning',steps:['起床','洗漱','晨间护肤','早餐','出门']},
-  {id:402,title:'晚间护肤',steps:['洁面','爽肤水','精华','面霜']}
-]);
-let moods = store.get('moods', []);
-let anniversaries = store.get('anniversaries', [
-  {id:101,title:'我的生日',date:'2002-08-02',calendar:'solar',repeat:'yearly',mode:'countdown',remindDays:7,note:''}
-]);
-let focusTimer = null, focusStart = null, focusElapsed = 0, focusRunning = false;
+const S={get(k,d){try{const v=localStorage.getItem(k);return v===null?d:JSON.parse(v)}catch(e){return d}},set(k,v){localStorage.setItem(k,JSON.stringify(v))}};
+const todayKey=()=>dateKey(new Date());
+const dateKey=d=>`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+const parseDate=s=>new Date(s+'T00:00:00');
+const dayStart=d=>new Date(d.getFullYear(),d.getMonth(),d.getDate());
+const days=(a,b)=>Math.round((dayStart(b)-dayStart(a))/86400000);
+const esc=s=>String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]));
+const uid=()=>Date.now()+Math.floor(Math.random()*10000);
+function toast(t){const x=document.getElementById('toast');x.textContent=t;x.classList.add('show');setTimeout(()=>x.classList.remove('show'),1600)}
+function showSheet(h){sheetCard.innerHTML=h;sheet.classList.add('show');quickAdd.classList.remove('show')}
+function closeSheet(){sheet.classList.remove('show')}
+function toggleQuick(){quickAdd.classList.toggle('show')}
+function saveAll(){
+ ['plans','planPool','routines','habits','habitLogs','moods','life','money','moneyCategories','budgets','health','anniversaries','knowledge','focusRecords'].forEach(k=>S.set(k,window[k]));
+}
+function normalize(){
+ // migrate old data without creating mysterious blank plans
+ plans=(plans||[]).filter(p=>p&&String(p.title||'').trim()).map(p=>({...p,startDate:p.startDate||todayKey(),endDate:p.endDate||p.startDate||todayKey(),done:!!p.done,focus:p.focus!==false}));
+ planPool=(planPool||[]).filter(p=>p&&String(p.title||'').trim());
+ routines=(routines||[]).map(r=>({...r,time:r.time||'07:00',repeat:r.repeat||'daily',days:r.days||[],steps:(r.steps||[]).map((s,i)=>typeof s==='string'?{id:uid()+i,title:s}:s)}));
+ habits=(habits||[]).map(h=>({...h,type:h.type||'fixed',period:h.period||'daily',target:Number(h.target||h.goal||1),minGap:Number(h.minGap||2),idealGap:Number(h.idealGap||3),maxGap:Number(h.maxGap||4),active:h.active!==false}));
+ life=(life||[]).filter(x=>x&&((x.text||'').trim()||(x.photoIds||[]).length||x.type==='drink'||x.type==='anniversary'));
+}
+let plans=S.get('plans',[]);
+let planPool=S.get('planPool',[]);
+let routines=S.get('routines',[]);
+let habits=S.get('habits',[]);
+let habitLogs=S.get('habitLogs',[]);
+let moods=S.get('moods',[]);
+let life=S.get('life',[]);
+let money=S.get('money',[]);
+let moneyCategories=S.get('moneyCategories',['餐饮','饮品','购物','交通','美妆护肤','娱乐','医疗','生活缴费','学习','旅行','其他']);
+let budgets=S.get('budgets',{monthly:3000,categories:{}});
+let health=S.get('health',{weight:[],periods:[],exercise:[],sleep:[],steps:[]});
+let anniversaries=S.get('anniversaries',[]);
+let knowledge=S.get('knowledge',[]);
+let focusRecords=S.get('focusRecords',S.get('focus',[]));
+let monthNotes=S.get('monthNotes',{});
+normalize();saveAll();
 
-function persist(){store.set('plans',plans);store.set('life',life);store.set('money',money);store.set('weight',weight);store.set('focus',focus);store.set('anniversaries',anniversaries);store.set('planPool',planPool);store.set('habits',habits);store.set('routines',routines);store.set('moods',moods)}
-function esc(s=''){return s.replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]))}
-function fmtDate(){
-  const d=new Date(); const wd=['日','一','二','三','四','五','六'][d.getDay()];
-  return `${d.getMonth()+1}月${d.getDate()}日 · 星期${wd}`;
-}
-document.getElementById('todayDate').textContent=fmtDate();
-document.getElementById('monthLabel').textContent=`${new Date().getFullYear()}年 ${new Date().getMonth()+1}月`;
+const PhotoDB={db:null,async open(){if(this.db)return this.db;this.db=await new Promise((ok,no)=>{const r=indexedDB.open('MyLifeOSPhotos',2);r.onupgradeneeded=()=>{const db=r.result;if(!db.objectStoreNames.contains('photos'))db.createObjectStore('photos',{keyPath:'id'})};r.onsuccess=()=>ok(r.result);r.onerror=()=>no(r.error)});return this.db},async put(blob){const db=await this.open(),id='p_'+uid();return new Promise((ok,no)=>{const tx=db.transaction('photos','readwrite');tx.objectStore('photos').put({id,blob});tx.oncomplete=()=>ok(id);tx.onerror=()=>no(tx.error)})},async get(id){const db=await this.open();return new Promise((ok,no)=>{const r=db.transaction('photos').objectStore('photos').get(id);r.onsuccess=()=>ok(r.result?.blob||null);r.onerror=()=>no(r.error)})}};
+const photoUrls={};async function photoURL(id){if(photoUrls[id])return photoUrls[id];const b=await PhotoDB.get(id);if(!b)return'';return photoUrls[id]=URL.createObjectURL(b)}
+async function saveFiles(inputId){const fs=[...(document.getElementById(inputId)?.files||[])],ids=[];for(const f of fs)ids.push(await PhotoDB.put(f));return ids}
+async function photoHtml(ids=[],cls='life'){const us=[];for(const id of ids){const u=await photoURL(id);if(u)us.push(u)}if(!us.length)return'';if(us.length===1)return`<img class="${cls==='receipt'?'receipt-photo':'life-photo'}" src="${us[0]}">`;return`<div class="photo-grid">${us.map(u=>`<div class="photo-thumb"><img src="${u}"></div>`).join('')}</div>`}
 
-function switchView(id){
-  document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
-  document.getElementById(id).classList.add('active');
-  document.querySelectorAll('.nav button[data-view]').forEach(b=>b.classList.toggle('active',b.dataset.view===id));
-  document.getElementById('quickAdd').classList.remove('show');
-  render();
-  scrollTo(0,0);
-}
-function toggleQuickAdd(){document.getElementById('quickAdd').classList.toggle('show')}
-function render(){
-  renderPlans(); renderLife(); renderArchive(); renderCalendar(); renderAnniversaries(); renderTodayAnniversary(); renderPlanPool(); renderTodayMood();
-}
-function renderPlans(){
-  const mk = p => `<div class="row">
-    <div class="left"><button class="check ${p.done?'done':''}" onclick="togglePlan(${p.id})"></button><span class="plan-text ${p.done?'muted':''}">${esc(p.title)}</span></div>
-    ${p.focus && !p.done?`<button class="focus-link" onclick="startFocusForPlan(${p.id})">▶ 专注</button>`:''}
-  </div>`;
-  document.getElementById('todayPlans').innerHTML = plans.map(mk).join('') + `<div class="row"><button class="iconbtn" style="font-size:16px" onclick="openAdd('plan')">＋ 添加计划</button></div>`;
-  document.getElementById('planList').innerHTML = plans.map(mk).join('');
-  const done=plans.filter(p=>p.done).length;
-  document.getElementById('planCount').textContent=`${done} / ${plans.length}`;
-  document.getElementById('planListCount').textContent=`${plans.length} 项`;
-}
+// sample only if truly empty
+if(!routines.length)routines=[{id:1,title:'Morning',time:'07:00',repeat:'daily',days:[],steps:[{id:11,title:'起床'},{id:12,title:'洗漱'},{id:13,title:'晨间护肤'},{id:14,title:'早餐'},{id:15,title:'出门'}]}];
+if(!habits.length)habits=[{id:21,title:'阅读',type:'fixed',period:'daily',target:1,active:true},{id:22,title:'运动',type:'count',period:'weekly',target:3,active:true},{id:23,title:'面膜',type:'flex',period:'flex',target:1,minGap:2,idealGap:3,maxGap:4,active:true}];
+if(!anniversaries.length)anniversaries=[{id:31,title:'我的生日',date:'2002-08-02',repeat:'yearly',calendar:'solar',mode:'countdown',remindDays:7}];
+saveAll();
 
-function renderPlanPool(){
-  const box=document.getElementById('planPoolList'); if(!box)return;
-  document.getElementById('planPoolCount').textContent=planPool.length;
-  box.innerHTML=(planPool.map(p=>`<div class="row tap" onclick="openPlanPoolItem(${p.id})"><span>${esc(p.title)}</span><span class="muted">未安排 ›</span></div>`).join('')||'<div class="muted">Plan Pool 为空。</div>')
-  +`<div class="row"><button class="iconbtn" style="font-size:15px" onclick="openAddPlanPool()">＋ 添加到 Plan Pool</button></div>`;
-}
-function openAddPlanPool(){showSheet(`<div class="sheet-head"><h2>加入 Plan Pool</h2><button class="iconbtn" onclick="closeSheet()">×</button></div><div class="field"><label>想做什么？</label><input id="poolTitle"></div><button class="primary" onclick="savePlanPool()">保存</button>`)}
-function savePlanPool(){const t=document.getElementById('poolTitle').value.trim();if(!t)return;planPool.push({id:Date.now(),title:t});persist();closeSheet();render()}
-function openPlanPoolItem(id){const p=planPool.find(x=>x.id===id);if(!p)return;showSheet(`<div class="sheet-head"><h2>${esc(p.title)}</h2><button class="iconbtn" onclick="closeSheet()">×</button></div><button class="primary" onclick="schedulePoolItem(${id})">安排到今天</button><div style="height:10px"></div><button class="secondary" onclick="deletePoolItem(${id})">删除</button>`)}
-function schedulePoolItem(id){const p=planPool.find(x=>x.id===id);if(!p)return;plans.push({id:Date.now(),title:p.title,done:false,focus:true});planPool=planPool.filter(x=>x.id!==id);persist();closeSheet();render()}
-function deletePoolItem(id){planPool=planPool.filter(x=>x.id!==id);persist();closeSheet();render()}
+let selectedPlanDate=todayKey(),planMonth=new Date(),archiveDate=new Date(),lifeMode='timeline';
+let focusState=S.get('focusState',null),focusTimer=null;
+todayDate.textContent=new Date().toLocaleDateString('zh-CN',{month:'long',day:'numeric',weekday:'long'});
 
+function switchView(id){document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));document.getElementById(id).classList.add('active');document.querySelectorAll('.nav button[data-view]').forEach(b=>b.classList.toggle('active',b.dataset.view===id));quickAdd.classList.remove('show');render();scrollTo(0,0)}
+function render(){renderToday();renderPlan();renderLife();renderArchive();resumeFocus()}
+function occursOnPlan(p,d){return p.startDate<=d && (p.endDate||p.startDate)>=d}
+function plansFor(d){return plans.filter(p=>occursOnPlan(p,d))}
+function planRow(p){return`<div class="row"><div class="left"><button class="check ${p.done?'done':''}" onclick="togglePlan(${p.id});event.stopPropagation()"></button><div onclick="openPlanForm(${p.id})"><strong>${esc(p.title)}</strong><div class="muted">${p.startDate}${p.endDate&&p.endDate!==p.startDate?' → '+p.endDate:''}</div></div></div>${p.focus&&!p.done?`<button class="action" onclick="openFocusForm(${p.id});event.stopPropagation()">▶ 专注</button>`:''}</div>`}
+function togglePlan(id){const p=plans.find(x=>x.id===id);if(p){p.done=!p.done;saveAll();render()}}
+
+function routineOccurs(r,date=new Date()){const dow=date.getDay();if(r.repeat==='daily')return true;if(r.repeat==='weekdays')return dow>=1&&dow<=5;if(r.repeat==='weekends')return dow===0||dow===6;if(r.repeat==='custom')return (r.days||[]).includes(dow);return true}
+function renderToday(){
+ const d=todayKey(),ps=plansFor(d);todayPlanCount.textContent=`${ps.filter(x=>x.done).length}/${ps.length}`;
+ todayPlans.innerHTML=ps.length?ps.map(planRow).join(''):`<div class="empty">今天还没有计划。<br><button class="action" style="margin-top:8px" onclick="openPlanForm()">＋ 添加</button></div>`;
+ const rs=routines.filter(r=>routineOccurs(r));todayRoutine.innerHTML=rs.length?rs.map(r=>`<div class="row" onclick="openRoutineDetail(${r.id})"><div><strong>${esc(r.title)}</strong><div class="muted">${r.time} · ${(r.steps||[]).length} 个步骤</div></div><span>›</span></div>`).join(''):`<div class="empty">今天没有 Routine。</div>`;
+ const hs=habits.filter(h=>h.active&&habitDueToday(h));
+ todayHabits.innerHTML=hs.length?hs.map(h=>habitTodayRow(h)).join(''):`<div class="empty">今天没有需要提醒的习惯。</div>`;
+ const ms=moods.filter(m=>m.date===d&&m.daily);todayMoodText.textContent=ms.length?`${ms.at(-1).emoji} ${ms.at(-1).label}`:'还没记录';
+ const reminders=[];
+ const anns=anniversaries.map(a=>({a,n:nextAnniv(a)})).filter(x=>x.n&&days(new Date(),x.n)>=0&&days(new Date(),x.n)<=Number(x.a.remindDays||7)).sort((x,y)=>x.n-y.n);
+ anns.forEach(({a,n})=>reminders.push(`<div class="row" onclick="openAnniv(${a.id})"><span>♡ ${esc(a.title)}</span><span class="muted">${days(new Date(),n)===0?'今天':`还有 ${days(new Date(),n)} 天`}</span></div>`));
+ todayReminders.innerHTML=reminders.length?reminders.join(''):`<div class="empty">今天没有额外提醒。</div>`;
+}
+function periodStart(h,d=new Date()){if(h.period==='daily')return dateKey(d);if(h.period==='weekly'){const x=new Date(d);const n=(x.getDay()+6)%7;x.setDate(x.getDate()-n);return dateKey(x)}if(h.period==='monthly')return`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-01`;return''}
+function habitLogsInPeriod(h){if(h.type==='flex')return habitLogs.filter(l=>l.habitId===h.id);const start=periodStart(h);return habitLogs.filter(l=>l.habitId===h.id&&l.date>=start&&l.date<=todayKey())}
+function lastHabitDate(h){const a=habitLogs.filter(l=>l.habitId===h.id).sort((a,b)=>a.date.localeCompare(b.date));return a.length?a.at(-1).date:null}
+function habitDueToday(h){if(h.type==='flex'){const last=lastHabitDate(h);if(!last)return true;return days(parseDate(last),new Date())>=h.minGap}return habitLogsInPeriod(h).length<h.target}
+function habitTodayRow(h){const logs=habitLogsInPeriod(h),doneToday=habitLogs.some(l=>l.habitId===h.id&&l.date===todayKey());let meta='';if(h.type==='flex'){const last=lastHabitDate(h);meta=last?`距上次 ${days(parseDate(last),new Date())} 天 · 理想 ${h.idealGap} 天`:'还没有记录'}else meta=`${h.period==='daily'?'每天':h.period==='weekly'?'每周':'每月'} ${h.target} 次 · 当前 ${logs.length}/${h.target}`;return`<div class="row"><div class="left"><button class="check ${doneToday?'done':''}" onclick="toggleHabitToday(${h.id})"></button><div><strong>${esc(h.title)}</strong><div class="muted">${meta}</div></div></div><button class="action" onclick="openHabitSummary(${h.id})">总结</button></div>`}
+function toggleHabitToday(id){const i=habitLogs.findIndex(l=>l.habitId===id&&l.date===todayKey());if(i>=0)habitLogs.splice(i,1);else habitLogs.push({id:uid(),habitId:id,date:todayKey(),value:1});saveAll();render()}
 function openMood(){
- const opts=[['开心','😊'],['平静','🙂'],['满足','😌'],['疲惫','😴'],['烦躁','😫'],['难过','😢'],['焦虑','😰'],['兴奋','🤩']];
- showSheet(`<div class="sheet-head"><h2>心情打卡</h2><button class="iconbtn" onclick="closeSheet()">×</button></div><div class="mood-row">${opts.map(o=>`<button class="mood-btn" onclick="saveMood('${o[0]}','${o[1]}')"><span class="mood-emo">${o[1]}</span>${o[0]}</button>`).join('')}</div><div class="field"><label>一句话（可选）</label><textarea id="moodNote"></textarea></div>`);
+ const cur=moods.filter(m=>m.date===todayKey()&&m.daily).at(-1);const opts=[['开心','😊'],['平静','🙂'],['满足','😌'],['疲惫','😴'],['烦躁','😫'],['难过','😢'],['焦虑','😰'],['兴奋','🤩']];
+ showSheet(`<div class="sheet-head"><h2>心情打卡</h2><button class="iconbtn" onclick="closeSheet()">×</button></div><div id="moodChoice" data-label="${cur?.label||''}" data-emoji="${cur?.emoji||''}" class="mood-grid">${opts.map(o=>`<button class="moodbtn ${cur?.label===o[0]?'active':''}" onclick="chooseMood(this,'${o[0]}','${o[1]}')"><b>${o[1]}</b>${o[0]}</button>`).join('')}</div><div class="field"><label>一句话（可选）</label><textarea id="moodNote">${esc(cur?.note||'')}</textarea></div><button class="primary" onclick="confirmMood()">确定保存</button><div class="note" style="margin-top:9px">保存后 Today 会立即显示你的今日代表心情。</div>`)
 }
-function saveMood(label,emoji){const note=(document.getElementById('moodNote')?.value||'').trim(),now=new Date();moods.push({id:Date.now(),label,emoji,note,time:now.toTimeString().slice(0,5),date:localDateKey(now)});if(note)life.push({id:Date.now()+1,time:now.toTimeString().slice(0,5),text:note,type:'mood',moodLabel:label,moodEmoji:emoji});persist();closeSheet();render()}
-function renderTodayMood(){const el=document.getElementById('todayMoodLabel');if(!el)return;const arr=moods.filter(m=>m.date===localDateKey(new Date()));el.textContent=arr.length?`${arr[arr.length-1].emoji} ${arr[arr.length-1].label}`:'还没记录今日心情'}
+function chooseMood(btn,l,e){document.querySelectorAll('.moodbtn').forEach(x=>x.classList.remove('active'));btn.classList.add('active');moodChoice.dataset.label=l;moodChoice.dataset.emoji=e}
+function confirmMood(){const l=moodChoice.dataset.label,e=moodChoice.dataset.emoji;if(!l)return toast('先选择一个心情');moods=moods.filter(m=>!(m.date===todayKey()&&m.daily));moods.push({id:uid(),date:todayKey(),label:l,emoji:e,note:moodNote.value.trim(),daily:true});saveAll();closeSheet();render();toast('今日心情已保存')}
 
-async function saveLifeWithPhotos(){
- const t=(document.getElementById('lifeText')?.value||'').trim();
- const fs=[...(document.getElementById('lifePhotos')?.files||[])];
- if(!t&&!fs.length)return;
- const ids=[]; for(const f of fs)ids.push(await PhotoDB.put(f));
- const now=new Date();life.push({id:Date.now(),time:now.toTimeString().slice(0,5),text:t,type:'life',photoIds:ids});persist();closeSheet();await renderLife();
+// PLAN
+function renderPlan(){
+ monthTitle.textContent=planMonth.toLocaleDateString('zh-CN',{year:'numeric',month:'long'});selectedDateTitle.textContent=selectedPlanDate;
+ const y=planMonth.getFullYear(),m=planMonth.getMonth(),first=new Date(y,m,1).getDay(),cnt=new Date(y,m+1,0).getDate();let h=['日','一','二','三','四','五','六'].map(x=>`<div class="dow">${x}</div>`).join('');
+ for(let i=0;i<first;i++)h+='<div></div>';
+ for(let n=1;n<=cnt;n++){const k=dateKey(new Date(y,m,n)),pc=plansFor(k).length;h+=`<div class="day ${k===todayKey()?'today':''} ${k===selectedPlanDate?'selected':''}" onclick="selectPlanDate('${k}')">${n}${pc?`<div class="dots">${Array.from({length:Math.min(pc,3)},()=>'<i class="dot"></i>').join('')}</div>`:''}</div>`}
+ monthCalendar.innerHTML=h;
+ const ps=plansFor(selectedPlanDate);selectedDatePlans.innerHTML=ps.length?ps.map(planRow).join(''):`<div class="empty">这天没有计划。<br><button class="action" style="margin-top:8px" onclick="openPlanForm(null,'${selectedPlanDate}')">＋ 添加计划</button></div>`;
+ poolCount.textContent=planPool.length;planPool.innerHTML=(planPool.map(p=>`<div class="row" onclick="openPool(${p.id})"><span>${esc(p.title)}</span><span class="muted">未安排 ›</span></div>`).join('')||'<div class="empty">Plan Pool 为空。</div>')+`<div class="row"><button class="iconbtn" style="font-size:15px" onclick="openPoolForm()">＋ 添加到 Plan Pool</button></div>`;
+ annivCount.textContent=anniversaries.length;annivList.innerHTML=(anniversaries.slice().sort((a,b)=>nextAnniv(a)-nextAnniv(b)).map(a=>`<div class="row" onclick="openAnniv(${a.id})"><div><strong>${esc(a.title)}</strong><div class="muted">${a.date} · ${a.repeat==='yearly'?'每年':a.repeat==='monthly'?'每月':'不重复'}</div></div><span class="pill">${annivLabel(a)}</span></div>`).join('')||'<div class="empty">还没有纪念日。</div>')+`<div class="row"><button class="iconbtn" style="font-size:15px" onclick="openAnnivForm()">＋ 添加纪念日</button></div>`;
 }
-async function lifePhotoHtml(ids=[]){
- const urls=[];for(const id of ids){if(!photoUrls[id]){const blob=await PhotoDB.get(id);if(blob)photoUrls[id]=URL.createObjectURL(blob)}if(photoUrls[id])urls.push(photoUrls[id])}
- if(!urls.length)return'';if(urls.length===1)return`<img class="photo-large" src="${urls[0]}">`;return`<div class="photo-grid">${urls.map(u=>`<div class="photo-thumb"><img src="${u}"></div>`).join('')}</div>`;
-}
+function changeMonth(n){planMonth=new Date(planMonth.getFullYear(),planMonth.getMonth()+n,1);renderPlan()}
+function selectPlanDate(k){selectedPlanDate=k;const d=parseDate(k);planMonth=new Date(d.getFullYear(),d.getMonth(),1);renderPlan()}
+function openPlanForm(id=null,forcedDate=null){const p=id?plans.find(x=>x.id===id):null,sd=forcedDate||p?.startDate||selectedPlanDate||todayKey();showSheet(`<div class="sheet-head"><h2>${p?'编辑计划':'新建计划'}</h2><button class="iconbtn" onclick="closeSheet()">×</button></div><div class="field"><label>计划</label><input id="pfTitle" value="${esc(p?.title||'')}" placeholder="做什么？"></div><div class="two"><div class="field"><label>开始日期</label><input id="pfStart" type="date" value="${sd}"></div><div class="field"><label>结束日期</label><input id="pfEnd" type="date" value="${p?.endDate||sd}"></div></div><div class="field"><label><input id="pfFocus" type="checkbox" ${p?.focus!==false?'checked':''}> 可以直接专注</label></div><button class="primary" onclick="savePlanForm(${id||'null'})">保存</button>${p?`<div style="height:9px"></div><button class="danger" onclick="deletePlan(${p.id})">删除计划</button>`:''}`)}
+function savePlanForm(id){const t=pfTitle.value.trim(),s=pfStart.value,e=pfEnd.value||s;if(!t||!s)return toast('请填写计划和日期');if(e<s)return toast('结束日期不能早于开始日期');if(id){const p=plans.find(x=>x.id===id);Object.assign(p,{title:t,startDate:s,endDate:e,focus:pfFocus.checked})}else plans.push({id:uid(),title:t,startDate:s,endDate:e,focus:pfFocus.checked,done:false});saveAll();closeSheet();selectedPlanDate=s;render();toast('计划已保存')}
+function deletePlan(id){plans=plans.filter(x=>x.id!==id);saveAll();closeSheet();render();toast('计划已删除')}
+function openPoolForm(){showSheet(`<div class="sheet-head"><h2>Plan Pool</h2><button class="iconbtn" onclick="closeSheet()">×</button></div><div class="field"><label>以后想做什么？</label><input id="poolTitle"></div><button class="primary" onclick="savePool()">保存</button>`)}
+function savePool(){const t=poolTitle.value.trim();if(!t)return;planPool.push({id:uid(),title:t});saveAll();closeSheet();render()}
+function openPool(id){const p=planPool.find(x=>x.id===id);showSheet(`<div class="sheet-head"><h2>${esc(p.title)}</h2><button class="iconbtn" onclick="closeSheet()">×</button></div><div class="field"><label>安排日期</label><input id="poolDate" type="date" value="${todayKey()}"></div><button class="primary" onclick="schedulePool(${id})">安排到日期</button><div style="height:9px"></div><button class="danger" onclick="deletePool(${id})">删除</button>`)}
+function schedulePool(id){const p=planPool.find(x=>x.id===id),d=poolDate.value;if(!d)return;plans.push({id:uid(),title:p.title,startDate:d,endDate:d,focus:true,done:false});planPool=planPool.filter(x=>x.id!==id);saveAll();closeSheet();selectedPlanDate=d;render()}
+function deletePool(id){planPool=planPool.filter(x=>x.id!==id);saveAll();closeSheet();render()}
 
-function togglePlan(id){const p=plans.find(x=>x.id===id); p.done=!p.done; persist(); render()}
-async function renderLife(){
-  const el=document.getElementById('lifeFeed'),items=life.slice().reverse();let out='';
-  for(const x of items){
-    out+=`<div class="life-item"><div class="life-time">${esc(x.time||'此刻')}</div>${x.text?`<div>${esc(x.text)}</div>`:''}${await lifePhotoHtml(x.photoIds||[])}${x.type==='drink'?'<div class="photo">饮品记录</div>':''}${x.type==='anniversary'?'<div class="muted" style="margin-top:6px">纪念日记录</div>':''}${x.type==='mood'?`<div class="muted" style="margin-top:6px">${x.moodEmoji||''} ${x.moodLabel||''}</div>`:''}</div>`;
-  }
-  el.innerHTML=out||'<div class="muted">还没有记录。</div>';
-}
-function renderArchive(){
-  document.getElementById('lifeStat').textContent=life.length;
-  document.getElementById('planStat').textContent=plans.filter(x=>x.done).length;
-  document.getElementById('drinkStat').textContent=life.filter(x=>x.type==='drink').length;
-  document.getElementById('anniversaryStat').textContent=anniversaries.length;
-  const mins=focus.reduce((a,b)=>a+(b.minutes||0),0);
-  document.getElementById('focusStat').textContent=mins<60?`${mins}m`:`${Math.floor(mins/60)}h ${mins%60}m`;
-}
-function renderCalendar(){
-  const d=new Date(), y=d.getFullYear(), m=d.getMonth(), first=new Date(y,m,1).getDay(), days=new Date(y,m+1,0).getDate();
-  let html=['日','一','二','三','四','五','六'].map(x=>`<div class="dow">${x}</div>`).join('');
-  for(let i=0;i<first;i++) html+='<div></div>';
-  for(let day=1;day<=days;day++) html+=`<div class="day ${day===d.getDate()?'today':''} ${(day%3===0)?'dot':''}">${day}</div>`;
-  document.getElementById('calendar').innerHTML=html;
-}
-function closeSheet(){document.getElementById('sheet').classList.remove('show')}
-function showSheet(html){document.getElementById('sheetCard').innerHTML=html;document.getElementById('sheet').classList.add('show');document.getElementById('quickAdd').classList.remove('show')}
-function openAdd(type){
-  if(type==='plan') return showSheet(`
-    <div class="sheet-head"><h2>新建计划</h2><button class="iconbtn" onclick="closeSheet()">×</button></div>
-    <div class="field"><label>做什么？</label><input id="planTitle" placeholder="例如：学习药理学"></div>
-    <div class="field"><label><input type="checkbox" id="planFocus"> 可以直接专注</label></div>
-    <button class="primary" onclick="savePlan()">保存</button>`);
-  if(type==='life') return showSheet(`
-    <div class="sheet-head"><h2>记录此刻</h2><button class="iconbtn" onclick="closeSheet()">×</button></div>
-    <div class="field"><textarea id="lifeText" placeholder="一句话、几句话，或者只发照片……"></textarea></div>
-    <div class="field"><label>照片</label><input id="lifePhotos" type="file" accept="image/*" multiple></div>
-    <div class="section-note">照片保存在这台设备的浏览器里，不上传到 GitHub。</div>
-    <div style="height:12px"></div>
-    <button class="primary" onclick="saveLifeWithPhotos()">发布</button>`);
-  if(type==='money') return showSheet(`
-    <div class="sheet-head"><h2>记一笔</h2><button class="iconbtn" onclick="closeSheet()">×</button></div>
-    <div class="field"><label>金额</label><input id="moneyAmount" inputmode="decimal" placeholder="0.00"></div>
-    <div class="field"><label>分类</label><select id="moneyCat"><option>餐饮</option><option>饮品</option><option>购物</option><option>交通</option><option>美妆护肤</option><option>其他</option></select></div>
-    <div class="field"><label>备注（可选）</label><input id="moneyNote"></div>
-    <button class="primary" onclick="saveMoney()">保存</button>`);
-  if(type==='weight') return showSheet(`
-    <div class="sheet-head"><h2>记录体重</h2><button class="iconbtn" onclick="closeSheet()">×</button></div>
-    <div class="field"><label>kg</label><input id="weightVal" inputmode="decimal" placeholder="52.4"></div>
-    <button class="primary" onclick="saveWeight()">保存</button>`);
-  if(type==='drink') return showSheet(`
-    <div class="sheet-head"><h2>饮品打卡</h2><button class="iconbtn" onclick="closeSheet()">×</button></div>
-    <div class="field"><label>品牌</label><input id="drinkBrand" placeholder="霸王茶姬"></div>
-    <div class="field"><label>饮品</label><input id="drinkName" placeholder="伯牙绝弦"></div>
-    <div class="field"><label>评分</label><select id="drinkRate"><option>★★★★★</option><option>★★★★☆</option><option>★★★☆☆</option><option>★★☆☆☆</option><option>★☆☆☆☆</option></select></div>
-    <div class="field"><label>价格（可选）</label><input id="drinkPrice" inputmode="decimal" placeholder="18"></div>
-    <button class="primary" onclick="saveDrink()">保存</button>`);
-  if(type==='anniversary') return showSheet(`
-    <div class="sheet-head"><h2>新建纪念日</h2><button class="iconbtn" onclick="closeSheet()">×</button></div>
-    <div class="field"><label>纪念日名称</label><input id="annivTitle" placeholder="例如：妈妈生日、第一次旅行"></div>
-    <div class="field"><label>日期</label><input id="annivDate" type="date"></div>
-    <div class="field"><label>历法</label><select id="annivCalendar"><option value="solar">公历</option><option value="lunar">农历（V0.2 先记录，后续完善换算）</option></select></div>
-    <div class="field"><label>重复</label><select id="annivRepeat"><option value="yearly">每年</option><option value="monthly">每月</option><option value="none">不重复</option></select></div>
-    <div class="field"><label>显示方式</label><select id="annivMode"><option value="countdown">距离下一次还有多久</option><option value="elapsed">已经过去多少天</option></select></div>
-    <div class="field"><label>提前提醒</label><select id="annivRemind"><option value="0">当天</option><option value="1">提前 1 天</option><option value="3">提前 3 天</option><option value="7" selected>提前 7 天</option><option value="30">提前 30 天</option></select></div>
-    <div class="field"><label>备注（可选）</label><textarea id="annivNote" placeholder="想记住的事情……"></textarea></div>
-    <button class="primary" onclick="saveAnniversary()">保存纪念日</button>`);
-  if(type==='focus') return openFocusSheet(null);
-}
+// ROUTINE
+function openRoutine(){showSheet(`<div class="sheet-head"><h2>Routine</h2><button class="iconbtn" onclick="closeSheet()">×</button></div>${routines.map(r=>`<div class="card" style="margin-bottom:10px" onclick="openRoutineDetail(${r.id})"><div class="row"><div><strong>${esc(r.title)}</strong><div class="muted">${r.time} · ${repeatLabel(r)}</div></div><span>›</span></div></div>`).join('')}<button class="secondary" onclick="openRoutineForm()">＋ 新建 Routine</button>`)}
+function repeatLabel(r){if(r.repeat==='daily')return'每天';if(r.repeat==='weekdays')return'工作日';if(r.repeat==='weekends')return'周末';if(r.repeat==='custom')return(r.days||[]).map(d=>'日一二三四五六'[d]).join('、');return''}
+function openRoutineForm(id=null){const r=id?routines.find(x=>x.id===id):null;showSheet(`<div class="sheet-head"><h2>${r?'编辑':'新建'} Routine</h2><button class="iconbtn" onclick="closeSheet()">×</button></div><div class="field"><label>名称</label><input id="rfTitle" value="${esc(r?.title||'')}"></div><div class="field"><label>时间</label><input id="rfTime" type="time" value="${r?.time||'07:00'}"></div><div class="field"><label>重复</label><select id="rfRepeat" onchange="rfDaysBox.classList.toggle('hidden',this.value!=='custom')"><option value="daily" ${r?.repeat==='daily'?'selected':''}>每天</option><option value="weekdays" ${r?.repeat==='weekdays'?'selected':''}>工作日</option><option value="weekends" ${r?.repeat==='weekends'?'selected':''}>周末</option><option value="custom" ${r?.repeat==='custom'?'selected':''}>自定义星期</option></select></div><div id="rfDaysBox" class="field ${r?.repeat==='custom'?'':'hidden'}"><label>星期（可多选）</label><div class="three">${[1,2,3,4,5,6,0].map(d=>`<label><input type="checkbox" name="rfday" value="${d}" ${(r?.days||[]).includes(d)?'checked':''}> 周${'日一二三四五六'[d]}</label>`).join('')}</div></div><div class="field"><label>步骤（每行一个，可增删）</label><textarea id="rfSteps" placeholder="起床&#10;洗漱&#10;早餐">${esc((r?.steps||[]).map(s=>s.title).join('\n'))}</textarea></div><button class="primary" onclick="saveRoutineForm(${id||'null'})">保存</button>${r?`<div style="height:9px"></div><button class="danger" onclick="deleteRoutine(${id})">删除 Routine</button>`:''}`)}
+function saveRoutineForm(id){const title=rfTitle.value.trim(),time=rfTime.value,repeat=rfRepeat.value,ds=[...document.querySelectorAll('input[name=rfday]:checked')].map(x=>Number(x.value)),ss=rfSteps.value.split('\n').map(x=>x.trim()).filter(Boolean).map(x=>({id:uid(),title:x}));if(!title)return toast('请填写名称');const o={title,time,repeat,days:ds,steps:ss};if(id)Object.assign(routines.find(x=>x.id===id),o);else routines.push({id:uid(),...o});saveAll();openRoutine();render()}
+function deleteRoutine(id){routines=routines.filter(x=>x.id!==id);saveAll();openRoutine();render()}
+function openRoutineDetail(id){const r=routines.find(x=>x.id===id),state=S.get('routineState_'+id+'_'+todayKey(),{});showSheet(`<div class="sheet-head"><h2>${esc(r.title)}</h2><button class="iconbtn" onclick="closeSheet()">×</button></div><div class="muted">${r.time} · ${repeatLabel(r)}</div><div class="card" style="margin-top:12px">${r.steps.map(s=>`<div class="row"><div class="left"><button class="check ${state[s.id]?'done':''}" onclick="toggleRoutineStep(${id},${s.id})"></button><span>${esc(s.title)}</span></div></div>`).join('')||'<div class="empty">还没有步骤。</div>'}</div><div style="height:10px"></div><button class="secondary" onclick="openRoutineForm(${id})">编辑 Routine</button>`)}
+function toggleRoutineStep(rid,sid){const k='routineState_'+rid+'_'+todayKey(),st=S.get(k,{});st[sid]=!st[sid];S.set(k,st);openRoutineDetail(rid);render()}
 
-function localDateKey(d){
-  return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
-}
-function startOfDay(d){ return new Date(d.getFullYear(),d.getMonth(),d.getDate()); }
-function daysBetween(a,b){ return Math.round((startOfDay(b)-startOfDay(a))/86400000); }
+// HABIT
+function openHabits(){showSheet(`<div class="sheet-head"><h2>Habit</h2><button class="iconbtn" onclick="closeSheet()">×</button></div>${habits.map(h=>`<div class="card" style="margin-bottom:10px" onclick="openHabitSummary(${h.id})"><div class="row"><div><strong>${esc(h.title)}</strong><div class="muted">${habitRule(h)}</div></div><span>›</span></div></div>`).join('')}<button class="secondary" onclick="openHabitForm()">＋ 新建 Habit</button>`)}
+function habitRule(h){if(h.type==='flex')return`弹性 · ${h.minGap}/${h.idealGap}/${h.maxGap} 天`;return`${h.type==='fixed'?'固定':'次数'} · ${h.period==='daily'?'每天':h.period==='weekly'?'每周':'每月'} ${h.target} 次`}
+function openHabitForm(id=null){const h=id?habits.find(x=>x.id===id):null;showSheet(`<div class="sheet-head"><h2>${h?'编辑':'新建'} Habit</h2><button class="iconbtn" onclick="closeSheet()">×</button></div><div class="field"><label>名称</label><input id="hfTitle" value="${esc(h?.title||'')}"></div><div class="field"><label>打卡类型</label><select id="hfType" onchange="habitFormType()"><option value="fixed" ${h?.type==='fixed'?'selected':''}>固定型</option><option value="count" ${h?.type==='count'?'selected':''}>次数型</option><option value="flex" ${h?.type==='flex'?'selected':''}>弹性周期型</option></select></div><div id="normalHabitFields" class="${h?.type==='flex'?'hidden':''}"><div class="field"><label>周期</label><select id="hfPeriod"><option value="daily" ${h?.period==='daily'?'selected':''}>每天</option><option value="weekly" ${h?.period==='weekly'?'selected':''}>每周</option><option value="monthly" ${h?.period==='monthly'?'selected':''}>每月</option></select></div><div class="field"><label>周期内打卡次数</label><input id="hfTarget" type="number" min="1" value="${h?.target||1}"></div></div><div id="flexHabitFields" class="${h?.type==='flex'?'':'hidden'}"><div class="three"><div class="field"><label>最早</label><input id="hfMin" type="number" min="1" value="${h?.minGap||2}"></div><div class="field"><label>理想</label><input id="hfIdeal" type="number" min="1" value="${h?.idealGap||3}"></div><div class="field"><label>最晚</label><input id="hfMax" type="number" min="1" value="${h?.maxGap||4}"></div></div></div><button class="primary" onclick="saveHabitForm(${id||'null'})">保存</button>${h?`<div style="height:9px"></div><button class="danger" onclick="deleteHabit(${id})">删除 Habit</button>`:''}`)}
+function habitFormType(){normalHabitFields.classList.toggle('hidden',hfType.value==='flex');flexHabitFields.classList.toggle('hidden',hfType.value!=='flex')}
+function saveHabitForm(id){const title=hfTitle.value.trim(),type=hfType.value;if(!title)return;const o={title,type,active:true,period:type==='flex'?'flex':hfPeriod.value,target:type==='flex'?1:Number(hfTarget.value||1),minGap:type==='flex'?Number(hfMin.value||2):2,idealGap:type==='flex'?Number(hfIdeal.value||3):3,maxGap:type==='flex'?Number(hfMax.value||4):4};if(id)Object.assign(habits.find(x=>x.id===id),o);else habits.push({id:uid(),...o});saveAll();openHabits();render()}
+function deleteHabit(id){habits=habits.filter(x=>x.id!==id);habitLogs=habitLogs.filter(x=>x.habitId!==id);saveAll();openHabits();render()}
+function openHabitSummary(id){const h=habits.find(x=>x.id===id),logs=habitLogs.filter(l=>l.habitId===id).sort((a,b)=>b.date.localeCompare(a.date)),month=todayKey().slice(0,7),monthCount=logs.filter(l=>l.date.startsWith(month)).length,periodCount=habitLogsInPeriod(h).length,last=lastHabitDate(h);showSheet(`<div class="sheet-head"><h2>${esc(h.title)}</h2><button class="iconbtn" onclick="closeSheet()">×</button></div><div class="note">${habitRule(h)}</div><div class="stats" style="margin:12px 0"><div class="stat"><span class="muted">总打卡</span><strong>${logs.length}</strong><span class="muted">次</span></div><div class="stat"><span class="muted">本月</span><strong>${monthCount}</strong><span class="muted">次</span></div><div class="stat"><span class="muted">当前周期</span><strong>${h.type==='flex'?(last?days(parseDate(last),new Date()):'-'):periodCount}</strong><span class="muted">${h.type==='flex'?'距上次天数':`/ ${h.target}`}</span></div><div class="stat"><span class="muted">最近一次</span><strong style="font-size:15px">${last||'暂无'}</strong><span class="muted">记录</span></div></div><div class="section-title"><span>最近记录</span><span></span></div><div class="card">${logs.slice(0,10).map(l=>`<div class="row"><span>${l.date}</span><span>✓</span></div>`).join('')||'<div class="empty">还没有打卡。</div>'}</div><div style="height:10px"></div><button class="secondary" onclick="openHabitForm(${id})">编辑 Habit</button>`)}
+// ANNIVERSARY
+function nextAnniv(a){const raw=parseDate(a.date),now=new Date();if(a.repeat==='none')return raw;if(a.repeat==='monthly'){let n=new Date(now.getFullYear(),now.getMonth(),raw.getDate());if(n<dayStart(now))n=new Date(now.getFullYear(),now.getMonth()+1,raw.getDate());return n}let n=new Date(now.getFullYear(),raw.getMonth(),raw.getDate());if(n<dayStart(now))n=new Date(now.getFullYear()+1,raw.getMonth(),raw.getDate());return n}
+function annivLabel(a){if(a.mode==='elapsed')return`已 ${Math.max(0,days(parseDate(a.date),new Date()))} 天`;const d=days(new Date(),nextAnniv(a));return d===0?'今天':`还有 ${d} 天`}
+function openAnnivForm(id=null){const a=id?anniversaries.find(x=>x.id===id):null;showSheet(`<div class="sheet-head"><h2>${a?'编辑':'新建'}纪念日</h2><button class="iconbtn" onclick="closeSheet()">×</button></div><div class="field"><label>名称</label><input id="afTitle" value="${esc(a?.title||'')}"></div><div class="field"><label>日期</label><input id="afDate" type="date" value="${a?.date||todayKey()}"></div><div class="two"><div class="field"><label>历法</label><select id="afCalendar"><option value="solar" ${a?.calendar!=='lunar'?'selected':''}>公历</option><option value="lunar" ${a?.calendar==='lunar'?'selected':''}>农历*</option></select></div><div class="field"><label>重复</label><select id="afRepeat"><option value="yearly" ${a?.repeat==='yearly'?'selected':''}>每年</option><option value="monthly" ${a?.repeat==='monthly'?'selected':''}>每月</option><option value="none" ${a?.repeat==='none'?'selected':''}>不重复</option></select></div></div><div class="two"><div class="field"><label>显示</label><select id="afMode"><option value="countdown" ${a?.mode!=='elapsed'?'selected':''}>倒数</option><option value="elapsed" ${a?.mode==='elapsed'?'selected':''}>累计</option></select></div><div class="field"><label>提前提醒</label><select id="afRemind">${[0,1,3,7,30].map(n=>`<option value="${n}" ${Number(a?.remindDays??7)===n?'selected':''}>${n===0?'当天':`提前 ${n} 天`}</option>`).join('')}</select></div></div><button class="primary" onclick="saveAnniv(${id||'null'})">保存</button>${a?`<div style="height:9px"></div><button class="danger" onclick="deleteAnniv(${id})">删除</button>`:''}<div class="note" style="margin-top:9px">* v0.4 已保留农历字段，精确农历换算仍属于后续增强。</div>`)}
+function saveAnniv(id){const o={title:afTitle.value.trim(),date:afDate.value,calendar:afCalendar.value,repeat:afRepeat.value,mode:afMode.value,remindDays:Number(afRemind.value)};if(!o.title||!o.date)return;if(id)Object.assign(anniversaries.find(x=>x.id===id),o);else anniversaries.push({id:uid(),...o});saveAll();closeSheet();render()}
+function openAnniv(id){const a=anniversaries.find(x=>x.id===id);showSheet(`<div class="sheet-head"><h2>${esc(a.title)}</h2><button class="iconbtn" onclick="closeSheet()">×</button></div><div class="card"><div class="row"><span>日期</span><strong>${a.date}</strong></div><div class="row"><span>状态</span><strong>${annivLabel(a)}</strong></div></div><div style="height:10px"></div><button class="primary" onclick="recordAnniv(${id})">记下今天</button><div style="height:9px"></div><button class="secondary" onclick="openAnnivForm(${id})">编辑</button>`)}
+function recordAnniv(id){const a=anniversaries.find(x=>x.id===id);life.push({id:uid(),date:todayKey(),time:new Date().toTimeString().slice(0,5),text:`♡ ${a.title}`,type:'anniversary',anniversaryId:id,photoIds:[],tags:['纪念日'],location:''});saveAll();closeSheet();render();toast('已记入 Life')}
+function deleteAnniv(id){anniversaries=anniversaries.filter(x=>x.id!==id);saveAll();closeSheet();render()}
 
-function nextOccurrence(a, now=new Date()){
-  const raw=new Date(a.date+'T00:00:00');
-  if(Number.isNaN(raw.getTime())) return null;
-  // Lunar is stored in V0.2; real lunar conversion will be added later.
-  if(a.repeat==='none') return raw;
-  if(a.repeat==='monthly'){
-    let n=new Date(now.getFullYear(), now.getMonth(), raw.getDate());
-    if(n < startOfDay(now)) n=new Date(now.getFullYear(), now.getMonth()+1, raw.getDate());
-    return n;
-  }
-  let n=new Date(now.getFullYear(), raw.getMonth(), raw.getDate());
-  if(n < startOfDay(now)) n=new Date(now.getFullYear()+1, raw.getMonth(), raw.getDate());
-  return n;
-}
-function anniversaryLabel(a){
-  const now=new Date(), raw=new Date(a.date+'T00:00:00');
-  if(a.mode==='elapsed'){
-    const d=Math.max(0,daysBetween(raw,now));
-    return `已经 ${d} 天`;
-  }
-  const n=nextOccurrence(a,now);
-  if(!n) return '';
-  const d=daysBetween(now,n);
-  return d===0?'就是今天':`还有 ${d} 天`;
-}
-function renderAnniversaries(){
-  const box=document.getElementById('anniversaryPreview');
-  if(!box) return;
-  document.getElementById('anniversaryCount').textContent=anniversaries.length;
-  const sorted=anniversaries.slice().sort((a,b)=>{
-    const na=nextOccurrence(a)||new Date('2999-01-01'), nb=nextOccurrence(b)||new Date('2999-01-01');
-    return na-nb;
-  });
-  box.innerHTML=(sorted.slice(0,3).map(a=>`
-    <div class="row" onclick="openAnniversary(${a.id})">
-      <div class="anniv-main"><div class="anniv-title">♡ ${esc(a.title)}</div><div class="anniv-meta">${esc(a.date)} · ${a.calendar==='lunar'?'农历':'公历'} · ${a.repeat==='yearly'?'每年':a.repeat==='monthly'?'每月':'不重复'}</div></div>
-      <span class="countdown">${anniversaryLabel(a)}</span>
-    </div>`).join('') || `<div class="muted">还没有纪念日。</div>`) +
-    `<div class="row"><button class="iconbtn" style="font-size:16px" onclick="event.stopPropagation();openAdd('anniversary')">＋ 添加纪念日</button></div>`;
-}
-function renderTodayAnniversary(){
-  const box=document.getElementById('todayAnniversary');
-  if(!box) return;
-  const now=new Date();
-  const upcoming=anniversaries.map(a=>({a,n:nextOccurrence(a,now)}))
-    .filter(x=>x.n && daysBetween(now,x.n)>=0 && daysBetween(now,x.n)<=Number(x.a.remindDays ?? 7))
-    .sort((x,y)=>x.n-y.n);
-  if(!upcoming.length){ box.innerHTML=''; return; }
-  box.innerHTML=upcoming.map(({a,n})=>{
-    const d=daysBetween(now,n);
-    return `<div class="hint" onclick="openAnniversary(${a.id})"><span>♡ ${esc(a.title)}</span><span class="muted">${d===0?'今天':`还有 ${d} 天`}</span></div>`;
-  }).join('');
-}
-function saveAnniversary(){
-  const title=document.getElementById('annivTitle').value.trim();
-  const date=document.getElementById('annivDate').value;
-  if(!title || !date){ alert('请填写名称和日期'); return; }
-  anniversaries.push({
-    id:Date.now(), title, date,
-    calendar:document.getElementById('annivCalendar').value,
-    repeat:document.getElementById('annivRepeat').value,
-    mode:document.getElementById('annivMode').value,
-    remindDays:Number(document.getElementById('annivRemind').value),
-    note:document.getElementById('annivNote').value.trim()
-  });
-  persist(); closeSheet(); render();
-}
-function openAnniversary(id){
-  const a=anniversaries.find(x=>x.id===id); if(!a) return;
-  showSheet(`
-    <div class="sheet-head"><h2>${esc(a.title)}</h2><button class="iconbtn" onclick="closeSheet()">×</button></div>
-    <div class="card">
-      <div class="row"><span>日期</span><strong>${esc(a.date)}</strong></div>
-      <div class="row"><span>历法</span><span>${a.calendar==='lunar'?'农历':'公历'}</span></div>
-      <div class="row"><span>重复</span><span>${a.repeat==='yearly'?'每年':a.repeat==='monthly'?'每月':'不重复'}</span></div>
-      <div class="row"><span>现在</span><strong>${anniversaryLabel(a)}</strong></div>
-      ${a.note?`<div class="row"><span>备注</span><span class="muted">${esc(a.note)}</span></div>`:''}
-    </div>
-    <div style="height:12px"></div>
-    <button class="primary" onclick="recordAnniversary(${a.id})">记下今天</button>
-    <div style="height:10px"></div>
-    <button class="secondary" onclick="deleteAnniversary(${a.id})">删除纪念日</button>`);
-}
-function recordAnniversary(id){
-  const a=anniversaries.find(x=>x.id===id); if(!a) return;
-  const now=new Date();
-  life.push({id:Date.now(),time:now.toTimeString().slice(0,5),text:`♡ ${a.title}`,type:'anniversary',anniversaryId:id});
-  persist(); closeSheet(); render();
-}
-function deleteAnniversary(id){
-  if(!confirm('删除这个纪念日？')) return;
-  anniversaries=anniversaries.filter(x=>x.id!==id);
-  persist(); closeSheet(); render();
-}
+// LIFE
+function setLifeMode(m){lifeMode=m;['Timeline','Photos','Drinks'].forEach(x=>document.getElementById('lifeTab'+x).classList.toggle('active',m===x.toLowerCase()));renderLife()}
+async function renderLife(){const box=lifeFeed;if(lifeMode==='photos'){const ids=life.flatMap(x=>x.photoIds||[]);if(!ids.length){box.innerHTML='<div class="card empty">还没有照片。</div>';return}let a=[];for(const id of ids){const u=await photoURL(id);if(u)a.push(`<div class="photo-thumb"><img src="${u}"></div>`)}box.innerHTML=`<div class="photo-grid">${a.join('')}</div>`;return}
+ let items=life.slice().sort((a,b)=>(b.date||'').localeCompare(a.date||'')||(b.time||'').localeCompare(a.time||''));if(lifeMode==='drinks')items=items.filter(x=>x.type==='drink');let out='';for(const x of items){out+=`<div class="life-item" onclick="openLifeDetail(${x.id})"><div class="life-time">${esc(x.date||todayKey())} · ${esc(x.time||'')}</div>${x.type==='drink'?`<strong>🧋 ${esc(x.brand||'')} ${esc(x.drinkName||'')}</strong><div class="muted">${'★'.repeat(Number(x.rating||0))}${x.price?` · ¥${x.price}`:''}</div>`:x.text?`<div>${esc(x.text)}</div>`:''}${await photoHtml(x.photoIds||[])}${x.location?`<div class="location">📍 ${esc(x.location)}</div>`:''}<div>${(x.tags||[]).map(t=>`<span class="tag">#${esc(t)}</span>`).join('')}</div></div>`}box.innerHTML=out||'<div class="card empty">还没有记录。</div>'}
+function openLifeForm(id=null){const x=id?life.find(z=>z.id===id):null;showSheet(`<div class="sheet-head"><h2>${x?'编辑':'记录'} Life</h2><button class="iconbtn" onclick="closeSheet()">×</button></div><div class="field"><label>文字</label><textarea id="lfText" placeholder="写点什么……">${esc(x?.text||'')}</textarea></div><div class="field"><label>照片</label><input id="lfPhotos" type="file" accept="image/*" multiple></div><div class="field"><label>地点</label><input id="lfLocation" value="${esc(x?.location||'')}" placeholder="例如：家 / 某某咖啡店 / 扬州"></div><div class="field"><label>标签（用逗号分隔）</label><input id="lfTags" value="${esc((x?.tags||[]).join(','))}" placeholder="周末,探店,穿搭"></div><div class="two"><div class="field"><label>日期</label><input id="lfDate" type="date" value="${x?.date||todayKey()}"></div><div class="field"><label>时间</label><input id="lfTime" type="time" value="${x?.time||new Date().toTimeString().slice(0,5)}"></div></div><button class="primary" onclick="saveLifeForm(${id||'null'})">保存</button>${x?`<div style="height:9px"></div><button class="danger" onclick="deleteLife(${id})">删除记录</button>`:''}`)}
+async function saveLifeForm(id){const newIds=await saveFiles('lfPhotos'),o={text:lfText.value.trim(),location:lfLocation.value.trim(),tags:lfTags.value.split(/[,，]/).map(x=>x.trim()).filter(Boolean),date:lfDate.value,time:lfTime.value};if(id){const x=life.find(z=>z.id===id);Object.assign(x,o);x.photoIds=[...(x.photoIds||[]),...newIds]}else life.push({id:uid(),type:'life',photoIds:newIds,...o});saveAll();closeSheet();render();toast('Life 已保存')}
+function openLifeDetail(id){const x=life.find(z=>z.id===id);showSheet(`<div class="sheet-head"><h2>${x.type==='drink'?'饮品记录':'Life'}</h2><button class="iconbtn" onclick="closeSheet()">×</button></div><div class="note">${x.date||''} ${x.time||''}${x.location?` · 📍 ${esc(x.location)}`:''}</div><div style="height:10px"></div><div>${esc(x.type==='drink'?`${x.brand||''} ${x.drinkName||''}`:x.text||'')}</div><div>${(x.tags||[]).map(t=>`<span class="tag">#${esc(t)}</span>`).join('')}</div><div style="height:12px"></div>${x.type==='drink'?`<button class="secondary" onclick="openDrinkForm(${id})">编辑</button>`:`<button class="secondary" onclick="openLifeForm(${id})">编辑</button>`}`)}
+function deleteLife(id){life=life.filter(x=>x.id!==id);saveAll();closeSheet();render()}
+function openDrinkForm(id=null){const x=id?life.find(z=>z.id===id):null;showSheet(`<div class="sheet-head"><h2>${x?'编辑':'记录'}饮品</h2><button class="iconbtn" onclick="closeSheet()">×</button></div><div class="two"><div class="field"><label>品牌</label><input id="dfBrand" value="${esc(x?.brand||'')}"></div><div class="field"><label>饮品名</label><input id="dfName" value="${esc(x?.drinkName||'')}"></div></div><div class="field"><label>照片</label><input id="dfPhotos" type="file" accept="image/*" multiple></div><div class="two"><div class="field"><label>评分</label><select id="dfRating">${[5,4,3,2,1].map(n=>`<option value="${n}" ${Number(x?.rating||5)===n?'selected':''}>${'★'.repeat(n)}</option>`).join('')}</select></div><div class="field"><label>价格</label><input id="dfPrice" type="number" step=".01" value="${x?.price||''}"></div></div><div class="field"><label>地点</label><input id="dfLocation" value="${esc(x?.location||'')}"></div><div class="field"><label>备注</label><textarea id="dfNote">${esc(x?.text||'')}</textarea></div><div class="field"><label><input id="dfSync" type="checkbox" ${x?.moneyId?'checked':''}> 同步到 Money</label></div><button class="primary" onclick="saveDrink(${id||'null'})">保存</button>${x?`<div style="height:9px"></div><button class="danger" onclick="deleteLife(${id})">删除</button>`:''}`)}
+async function saveDrink(id){const ids=await saveFiles('dfPhotos'),price=Number(dfPrice.value||0);let x=id?life.find(z=>z.id===id):null;if(!x){x={id:uid(),type:'drink',date:todayKey(),time:new Date().toTimeString().slice(0,5),photoIds:[],tags:['饮品']};life.push(x)}Object.assign(x,{brand:dfBrand.value.trim(),drinkName:dfName.value.trim(),rating:Number(dfRating.value),price,text:dfNote.value.trim(),location:dfLocation.value.trim(),photoIds:[...(x.photoIds||[]),...ids]});if(dfSync.checked&&price){if(x.moneyId){const m=money.find(z=>z.id===x.moneyId);if(m)Object.assign(m,{amount:price,category:'饮品',note:`${x.brand} ${x.drinkName}`})}else{const mid=uid();money.push({id:mid,type:'expense',amount:price,category:'饮品',date:todayKey(),merchant:x.brand,note:x.drinkName,receiptIds:[],tags:['饮品']});x.moneyId=mid}}saveAll();closeSheet();lifeMode='drinks';switchView('life');toast('饮品已保存')}
 
-function savePlan(){
-  const t=document.getElementById('planTitle').value.trim(); if(!t)return;
-  plans.push({id:Date.now(),title:t,done:false,focus:document.getElementById('planFocus').checked}); persist(); closeSheet(); render();
+// MONEY
+function openMoney(){const month=todayKey().slice(0,7),ms=money.filter(x=>x.date?.startsWith(month)&&x.type!=='income'),spent=ms.reduce((a,b)=>a+Number(b.amount||0),0),remain=Number(budgets.monthly||0)-spent;showSheet(`<div class="sheet-head"><h2>Money</h2><button class="iconbtn" onclick="closeSheet()">×</button></div><div class="stats"><div class="stat"><span class="muted">本月已花</span><strong>¥${spent.toFixed(0)}</strong></div><div class="stat"><span class="muted">剩余预算</span><strong>¥${remain.toFixed(0)}</strong></div></div><div class="section"><div class="section-title"><span>最近账单</span><span></span></div><div class="card">${money.slice().sort((a,b)=>(b.date||'').localeCompare(a.date||'')).slice(0,8).map(m=>`<div class="row" onclick="openMoneyDetail(${m.id})"><div><strong>${esc(m.category)}</strong><div class="muted">${m.date} · ${esc(m.merchant||m.note||'')}</div></div><strong>${m.type==='income'?'+':'-'}¥${Number(m.amount).toFixed(2)}</strong></div>`).join('')||'<div class="empty">还没有账单。</div>'}</div></div><button class="primary" onclick="openMoneyForm()">＋ 记一笔</button><div style="height:9px"></div><button class="secondary" onclick="openBudget()">预算与分类</button>`)}
+function openMoneyForm(id=null){const m=id?money.find(x=>x.id===id):null;showSheet(`<div class="sheet-head"><h2>${m?'编辑':'记一笔'}</h2><button class="iconbtn" onclick="closeSheet()">×</button></div><div class="two"><div class="field"><label>类型</label><select id="mfType"><option value="expense" ${m?.type!=='income'?'selected':''}>支出</option><option value="income" ${m?.type==='income'?'selected':''}>收入</option></select></div><div class="field"><label>金额</label><input id="mfAmount" type="number" step=".01" value="${m?.amount||''}"></div></div><div class="field"><label>分类</label><select id="mfCategory">${moneyCategories.map(c=>`<option ${m?.category===c?'selected':''}>${esc(c)}</option>`).join('')}</select></div><div class="field"><label>商家</label><input id="mfMerchant" value="${esc(m?.merchant||'')}"></div><div class="field"><label>备注</label><input id="mfNote" value="${esc(m?.note||'')}"></div><div class="field"><label>日期</label><input id="mfDate" type="date" value="${m?.date||todayKey()}"></div><div class="field"><label>小票照片</label><input id="mfReceipt" type="file" accept="image/*" multiple></div><button class="primary" onclick="saveMoneyForm(${id||'null'})">保存</button>${m?`<div style="height:9px"></div><button class="danger" onclick="deleteMoney(${id})">删除账单</button>`:''}`)}
+async function saveMoneyForm(id){const ids=await saveFiles('mfReceipt'),o={type:mfType.value,amount:Number(mfAmount.value||0),category:mfCategory.value,merchant:mfMerchant.value.trim(),note:mfNote.value.trim(),date:mfDate.value};if(!o.amount)return toast('请输入金额');if(id){const m=money.find(x=>x.id===id);Object.assign(m,o);m.receiptIds=[...(m.receiptIds||[]),...ids]}else money.push({id:uid(),receiptIds:ids,tags:[],...o});saveAll();openMoney();render()}
+async function openMoneyDetail(id){const m=money.find(x=>x.id===id);showSheet(`<div class="sheet-head"><h2>账单</h2><button class="iconbtn" onclick="closeSheet()">×</button></div><div class="card"><div style="text-align:center;padding:8px 0 16px"><div class="muted">MY LIFE OS · RECEIPT</div><div style="font-size:34px;font-weight:800;margin:10px">¥${Number(m.amount).toFixed(2)}</div><div>${esc(m.category)} · ${m.date}</div></div><div class="divider"></div><div class="row"><span>商家</span><span>${esc(m.merchant||'—')}</span></div><div class="row"><span>备注</span><span>${esc(m.note||'—')}</span></div></div><div id="receiptArea"></div><div style="height:10px"></div><button class="secondary" onclick="openMoneyForm(${id})">编辑账单</button>`);receiptArea.innerHTML=await photoHtml(m.receiptIds||[],'receipt')}
+function deleteMoney(id){money=money.filter(x=>x.id!==id);saveAll();openMoney();render()}
+function openBudget(){showSheet(`<div class="sheet-head"><h2>预算与分类</h2><button class="iconbtn" onclick="closeSheet()">×</button></div><div class="field"><label>月总预算</label><input id="budgetMonthly" type="number" value="${budgets.monthly||0}"></div><button class="primary" onclick="saveBudget()">保存预算</button><div class="section"><div class="section-title"><span>分类</span><span></span></div><div class="card">${moneyCategories.map((c,i)=>`<div class="row"><span>${esc(c)}</span><button class="iconbtn" style="font-size:14px;color:var(--danger)" onclick="deleteCategory(${i})">删除</button></div>`).join('')}</div></div><div class="field"><label>新增分类</label><div class="two"><input id="newCategory" placeholder="例如：宠物"><button class="secondary" onclick="addCategory()">添加</button></div></div>`)}
+function saveBudget(){budgets.monthly=Number(budgetMonthly.value||0);S.set('budgets',budgets);toast('预算已保存')}
+function addCategory(){const c=newCategory.value.trim();if(c&&!moneyCategories.includes(c)){moneyCategories.push(c);saveAll();openBudget()}}
+function deleteCategory(i){moneyCategories.splice(i,1);saveAll();openBudget()}
+
+// HEALTH
+function openHealth(){const w=health.weight.at(-1),month=todayKey().slice(0,7);showSheet(`<div class="sheet-head"><h2>Health</h2><button class="iconbtn" onclick="closeSheet()">×</button></div><div class="stats"><div class="stat"><span class="muted">体重</span><strong>${w?w.value:'—'}</strong><span class="muted">kg</span></div><div class="stat"><span class="muted">运动</span><strong>${health.exercise.filter(x=>x.date.startsWith(month)).length}</strong><span class="muted">本月次</span></div><div class="stat"><span class="muted">睡眠</span><strong>${health.sleep.at(-1)?.hours||'—'}</strong><span class="muted">小时</span></div><div class="stat"><span class="muted">生理期</span><strong>${periodStatus()}</strong><span class="muted">当前状态</span></div></div><div class="section"><div class="section-title"><span>体重趋势</span><span></span></div><div class="card">${weightChart()}</div></div><div class="quick-grid"><button class="qitem" onclick="openWeightForm()"><span>⚖️</span>体重</button><button class="qitem" onclick="openPeriodForm()"><span>🌸</span>生理期</button><button class="qitem" onclick="openExerciseForm()"><span>🏃</span>运动</button><button class="qitem" onclick="openSleepForm()"><span>🌙</span>睡眠</button><button class="qitem" onclick="openStepsForm()"><span>👟</span>步数</button></div>`)}
+function weightChart(){const a=health.weight.slice(-8);if(!a.length)return'<div class="empty">记录体重后这里会出现趋势。</div>';const vals=a.map(x=>Number(x.value)),min=Math.min(...vals),max=Math.max(...vals);return`<div class="bar-chart">${a.map(x=>`<div class="bar-wrap"><div class="bar" style="height:${20+(Number(x.value)-min)/(max-min||1)*75}px"></div>${x.date.slice(5)}</div>`).join('')}</div>`}
+function openWeightForm(){showSheet(`<div class="sheet-head"><h2>记录体重</h2><button class="iconbtn" onclick="closeSheet()">×</button></div><div class="field"><label>kg</label><input id="wfValue" type="number" step=".1"></div><div class="field"><label>日期</label><input id="wfDate" type="date" value="${todayKey()}"></div><button class="primary" onclick="saveWeight()">保存</button>`)}
+function saveWeight(){const v=Number(wfValue.value);if(!v)return;health.weight.push({id:uid(),value:v,date:wfDate.value});saveAll();closeSheet();render();toast('体重已记录')}
+function periodStatus(){const p=health.periods.at(-1);if(!p)return'未记录';if(p.start&&!p.end)return'经期中';return p.end?`上次 ${p.end.slice(5)}`:'未记录'}
+function openPeriodForm(){showSheet(`<div class="sheet-head"><h2>生理期</h2><button class="iconbtn" onclick="closeSheet()">×</button></div><div class="two"><div class="field"><label>开始日期</label><input id="perStart" type="date" value="${todayKey()}"></div><div class="field"><label>结束日期（可后补）</label><input id="perEnd" type="date"></div></div><div class="field"><label>备注</label><input id="perNote" placeholder="疼痛、状态等（可选）"></div><button class="primary" onclick="savePeriod()">保存</button><div class="section"><div class="section-title"><span>历史</span><span></span></div><div class="card">${health.periods.slice().reverse().slice(0,8).map(p=>`<div class="row"><span>${p.start} → ${p.end||'进行中'}</span><span class="muted">${esc(p.note||'')}</span></div>`).join('')||'<div class="empty">还没有记录。</div>'}</div></div>`)}
+function savePeriod(){health.periods.push({id:uid(),start:perStart.value,end:perEnd.value,note:perNote.value.trim()});saveAll();closeSheet();render()}
+function openExerciseForm(){showSheet(`<div class="sheet-head"><h2>记录运动</h2><button class="iconbtn" onclick="closeSheet()">×</button></div><div class="field"><label>类型</label><input id="exType" placeholder="走路 / 跑步 / 跳操"></div><div class="two"><div class="field"><label>分钟</label><input id="exMin" type="number"></div><div class="field"><label>日期</label><input id="exDate" type="date" value="${todayKey()}"></div></div><button class="primary" onclick="saveExercise()">保存</button>`)}
+function saveExercise(){health.exercise.push({id:uid(),type:exType.value.trim()||'运动',minutes:Number(exMin.value||0),date:exDate.value});saveAll();closeSheet();render();toast('运动已记录')}
+function openSleepForm(){showSheet(`<div class="sheet-head"><h2>记录睡眠</h2><button class="iconbtn" onclick="closeSheet()">×</button></div><div class="two"><div class="field"><label>睡眠时长（小时）</label><input id="slHours" type="number" step=".1"></div><div class="field"><label>日期</label><input id="slDate" type="date" value="${todayKey()}"></div></div><div class="field"><label>质量</label><select id="slQuality"><option>很好</option><option>一般</option><option>较差</option></select></div><button class="primary" onclick="saveSleep()">保存</button>`)}
+function saveSleep(){health.sleep.push({id:uid(),hours:Number(slHours.value||0),quality:slQuality.value,date:slDate.value});saveAll();closeSheet();render();toast('睡眠已记录')}
+function openStepsForm(){showSheet(`<div class="sheet-head"><h2>记录步数</h2><button class="iconbtn" onclick="closeSheet()">×</button></div><div class="field"><label>步数</label><input id="stValue" type="number"></div><div class="field"><label>日期</label><input id="stDate" type="date" value="${todayKey()}"></div><button class="primary" onclick="saveSteps()">保存</button>`)}
+function saveSteps(){health.steps.push({id:uid(),value:Number(stValue.value||0),date:stDate.value});saveAll();closeSheet();render()}
+
+// KNOWLEDGE
+function openKnowledge(){showSheet(`<div class="sheet-head"><h2>Knowledge</h2><button class="iconbtn" onclick="closeSheet()">×</button></div><div class="field"><input id="knSearch" placeholder="搜索笔记" oninput="renderKnowledge(this.value)"></div><div id="knowledgeList"></div><button class="secondary" onclick="openKnowledgeForm()">＋ 新建笔记</button>`);renderKnowledge('')}
+function renderKnowledge(q=''){const box=document.getElementById('knowledgeList');if(!box)return;const a=knowledge.filter(n=>(n.title+n.content+(n.tags||[]).join(' ')).toLowerCase().includes(q.toLowerCase()));box.innerHTML=a.map(n=>`<div class="card" style="margin-bottom:9px" onclick="openKnowledgeForm(${n.id})"><strong>${esc(n.title)}</strong><div class="muted" style="margin-top:5px">${esc((n.content||'').slice(0,60))}</div><div>${(n.tags||[]).map(t=>`<span class="tag">#${esc(t)}</span>`).join('')}</div></div>`).join('')||'<div class="empty">还没有笔记。</div>'}
+function openKnowledgeForm(id=null){const n=id?knowledge.find(x=>x.id===id):null;showSheet(`<div class="sheet-head"><h2>${n?'编辑':'新建'}笔记</h2><button class="iconbtn" onclick="closeSheet()">×</button></div><div class="field"><label>标题</label><input id="kfTitle" value="${esc(n?.title||'')}"></div><div class="field"><label>内容</label><textarea id="kfContent">${esc(n?.content||'')}</textarea></div><div class="field"><label>标签</label><input id="kfTags" value="${esc((n?.tags||[]).join(','))}"></div><button class="primary" onclick="saveKnowledge(${id||'null'})">保存</button>${n?`<div style="height:9px"></div><button class="danger" onclick="deleteKnowledge(${id})">删除</button>`:''}`)}
+function saveKnowledge(id){const o={title:kfTitle.value.trim(),content:kfContent.value.trim(),tags:kfTags.value.split(/[,，]/).map(x=>x.trim()).filter(Boolean)};if(!o.title)return;if(id)Object.assign(knowledge.find(x=>x.id===id),o);else knowledge.push({id:uid(),...o});saveAll();openKnowledge()}
+function deleteKnowledge(id){knowledge=knowledge.filter(x=>x.id!==id);saveAll();openKnowledge()}
+
+// FOCUS
+function openFocusForm(planId=null){const p=planId?plans.find(x=>x.id===planId):null;showSheet(`<div class="sheet-head"><h2>开始专注</h2><button class="iconbtn" onclick="closeSheet()">×</button></div>${p?`<div class="card" style="margin-bottom:12px"><strong>${esc(p.title)}</strong><div class="muted">关联 Plan</div></div>`:''}<div class="quick-grid"><button class="qitem" onclick="startFocus('pomodoro',25,${planId||'null'})"><span>🍅</span>番茄 25</button><button class="qitem" onclick="startFocus('countdown',45,${planId||'null'})"><span>⏳</span>倒计时 45</button><button class="qitem" onclick="startFocus('countup',0,${planId||'null'})"><span>⏱</span>正计时</button></div>`)}
+function startFocus(mode,min,planId){focusState={mode,target:min*60,planId,start:Date.now(),paused:false,pausedTotal:0};S.set('focusState',focusState);closeSheet();resumeFocus();toast('专注已开始')}
+function resumeFocus(){clearInterval(focusTimer);if(!focusState)return;focusFloat.classList.add('show');tickFocus();focusTimer=setInterval(tickFocus,1000)}
+function focusSeconds(){return Math.floor((Date.now()-focusState.start-(focusState.pausedTotal||0))/1000)}
+function tickFocus(){if(!focusState)return;const s=focusSeconds();let show=s;if(focusState.mode!=='countup'){show=Math.max(0,focusState.target-s);if(show<=0)return finishFocus()}focusFloatTime.textContent=`${String(Math.floor(show/60)).padStart(2,'0')}:${String(show%60).padStart(2,'0')}`}
+function openRunningFocus(){if(!focusState)return;showSheet(`<div class="sheet-head"><h2>专注中</h2><button class="iconbtn" onclick="closeSheet()">×</button></div><div style="font-size:45px;text-align:center;margin:28px 0">${focusFloatTime.textContent}</div><button class="primary" onclick="finishFocus()">结束并保存</button><div style="height:9px"></div><button class="danger" onclick="cancelFocus()">放弃本次</button>`)}
+function finishFocus(){if(!focusState)return;const min=Math.max(1,Math.round(focusSeconds()/60));focusRecords.push({id:uid(),minutes:min,date:todayKey(),planId:focusState.planId,mode:focusState.mode});focusState=null;S.set('focusState',null);saveAll();clearInterval(focusTimer);focusFloat.classList.remove('show');closeSheet();render();toast(`已保存 ${min} 分钟`)}
+function cancelFocus(){focusState=null;S.set('focusState',null);clearInterval(focusTimer);focusFloat.classList.remove('show');closeSheet()}
+
+// MY SPACE
+function openMySpace(){showSheet(`<div class="sheet-head"><h2>My Space</h2><button class="iconbtn" onclick="closeSheet()">×</button></div><div class="row" onclick="openHabits()"><span>🌱 Habit</span><span>›</span></div><div class="row" onclick="openRoutine()"><span>🔄 Routine</span><span>›</span></div><div class="row" onclick="openMoney()"><span>💰 Money</span><span>›</span></div><div class="row" onclick="openHealth()"><span>❤️ Health</span><span>›</span></div><div class="row" onclick="openKnowledge()"><span>📚 Knowledge</span><span>›</span></div><div class="row" onclick="lifeMode='drinks';closeSheet();switchView('life')"><span>🧋 Drinks</span><span>›</span></div><div class="row" onclick="openSearch()"><span>🔍 Search</span><span>›</span></div><div class="row" onclick="openBackup()"><span>⚙️ Settings & Backup</span><span>›</span></div>`)}
+function openSearch(){showSheet(`<div class="sheet-head"><h2>Search</h2><button class="iconbtn" onclick="closeSheet()">×</button></div><div class="field"><input id="searchQ" placeholder="搜索 Life / Plan / Knowledge / 饮品" oninput="runSearch(this.value)"></div><div id="searchResult" class="card"><div class="empty">输入关键词开始。</div></div>`)}
+function runSearch(q){q=q.trim().toLowerCase();if(!q)return searchResult.innerHTML='<div class="empty">输入关键词开始。</div>';const a=[];plans.filter(x=>x.title.toLowerCase().includes(q)).forEach(x=>a.push(`Plan · ${x.title}`));life.filter(x=>JSON.stringify(x).toLowerCase().includes(q)).forEach(x=>a.push(`Life · ${x.type==='drink'?(x.brand+' '+x.drinkName):(x.text||'照片记录')}`));knowledge.filter(x=>JSON.stringify(x).toLowerCase().includes(q)).forEach(x=>a.push(`Knowledge · ${x.title}`));searchResult.innerHTML=a.map(x=>`<div class="row"><span>${esc(x)}</span></div>`).join('')||'<div class="empty">没有找到。</div>'}
+function openBackup(){showSheet(`<div class="sheet-head"><h2>Settings & Backup</h2><button class="iconbtn" onclick="closeSheet()">×</button></div><div class="row"><span>版本</span><strong>v0.4</strong></div><div class="row"><span>数据模式</span><span class="muted">Local First</span></div><div class="note" style="margin:12px 0">结构化数据保存在本机 localStorage；照片保存在 IndexedDB。清除 Safari 网站数据会导致数据丢失。</div><button class="primary" onclick="exportBackup()">导出结构化备份</button><div style="height:9px"></div><div class="field"><label>导入 JSON 备份</label><input type="file" accept="application/json" onchange="importBackup(event)"></div>`)}
+function exportBackup(){const data={plans,planPool,routines,habits,habitLogs,moods,life,money,moneyCategories,budgets,health,anniversaries,knowledge,focusRecords,monthNotes};const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'}),a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='my-life-os-v0.4-backup.json';a.click();URL.revokeObjectURL(a.href)}
+function importBackup(e){const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{try{const d=JSON.parse(r.result);Object.keys(d).forEach(k=>{if(k in window)window[k]=d[k]});monthNotes=d.monthNotes||monthNotes;saveAll();S.set('monthNotes',monthNotes);closeSheet();render();toast('备份已导入')}catch(err){toast('备份文件无效')}};r.readAsText(f)}
+
+// ARCHIVE
+async function renderArchive(){archiveTitle.textContent=archiveDate.toLocaleDateString('zh-CN',{year:'numeric',month:'long'});const ym=`${archiveDate.getFullYear()}-${String(archiveDate.getMonth()+1).padStart(2,'0')}`,ls=life.filter(x=>(x.date||'').startsWith(ym)),ms=money.filter(x=>(x.date||'').startsWith(ym)&&x.type!=='income'),fs=focusRecords.filter(x=>(x.date||'').startsWith(ym)),hl=habitLogs.filter(x=>x.date.startsWith(ym));archiveStats.innerHTML=`<div class="stat"><span class="muted">Life</span><strong>${ls.length}</strong><span class="muted">条记录</span></div><div class="stat"><span class="muted">Money</span><strong>¥${ms.reduce((a,b)=>a+Number(b.amount||0),0).toFixed(0)}</strong><span class="muted">支出</span></div><div class="stat"><span class="muted">Focus</span><strong>${fs.reduce((a,b)=>a+Number(b.minutes||0),0)}m</strong><span class="muted">专注</span></div><div class="stat"><span class="muted">Habit</span><strong>${hl.length}</strong><span class="muted">次打卡</span></div>`;
+ const ids=ls.flatMap(x=>x.photoIds||[]);archivePhotoCount.textContent=ids.length;if(ids.length){let arr=[];for(const id of ids){const u=await photoURL(id);if(u)arr.push(`<div class="photo-thumb"><img src="${u}"></div>`)}archivePhotos.innerHTML=`<div class="photo-grid">${arr.join('')}</div>`}else archivePhotos.innerHTML='<div class="empty">这个月还没有照片。</div>';
+ const md=moods.filter(x=>x.date.startsWith(ym)&&x.daily),counts={};md.forEach(x=>counts[x.emoji]=(counts[x.emoji]||0)+1);archiveMoods.innerHTML=Object.keys(counts).length?Object.entries(counts).map(([e,n])=>`<span class="tag" style="font-size:17px">${e} × ${n}</span>`).join(''):'<div class="empty">这个月还没有心情记录。</div>';monthNote.value=monthNotes[ym]||'';
 }
-function saveLife(){
-  const t=document.getElementById('lifeText').value.trim(); if(!t)return;
-  const now=new Date(); life.push({id:Date.now(),time:now.toTimeString().slice(0,5),text:t,type:'life'}); persist(); closeSheet(); render();
-}
-function saveMoney(){
-  const a=parseFloat(document.getElementById('moneyAmount').value); if(!a)return;
-  money.push({id:Date.now(),amount:a,cat:document.getElementById('moneyCat').value,note:document.getElementById('moneyNote').value}); persist(); closeSheet();
-  alert('已记账');
-}
-function saveWeight(){
-  const v=parseFloat(document.getElementById('weightVal').value); if(!v)return;
-  weight.push({id:Date.now(),value:v,date:new Date().toISOString()}); persist(); closeSheet();
-  alert('体重已记录');
-}
-function saveDrink(){
-  const b=document.getElementById('drinkBrand').value.trim(), n=document.getElementById('drinkName').value.trim();
-  if(!b && !n)return;
-  const r=document.getElementById('drinkRate').value, p=parseFloat(document.getElementById('drinkPrice').value)||0;
-  const now=new Date(); life.push({id:Date.now(),time:now.toTimeString().slice(0,5),text:`${b}${b&&n?' · ':''}${n} ${r}`,type:'drink',amount:p});
-  if(p) money.push({id:Date.now()+1,amount:p,cat:'饮品',note:`${b} ${n}`});
-  persist(); closeSheet(); render();
-}
-function openRoutine(){
- showSheet(`<div class="sheet-head"><h2>Routine</h2><button class="iconbtn" onclick="closeSheet()">×</button></div>${routines.map(r=>`<div class="card" style="margin-bottom:12px" onclick="openRoutineDetail(${r.id})"><div class="row"><div><strong>${esc(r.title)}</strong><div class="muted">${r.steps.length} 个步骤</div></div><span>›</span></div></div>`).join('')}<button class="secondary" onclick="addRoutine()">＋ 新建 Routine</button>`);
-}
-function openRoutineDetail(id){const r=routines.find(x=>x.id===id);if(!r)return;showSheet(`<div class="sheet-head"><h2>${esc(r.title)}</h2><button class="iconbtn" onclick="closeSheet()">×</button></div><div class="card">${r.steps.map(s=>`<div class="row"><div class="left"><button class="check" onclick="this.classList.toggle('done')"></button><span>${esc(s)}</span></div></div>`).join('')}</div><div style="height:12px"></div><button class="secondary" onclick="openRoutine()">返回</button>`)}
-function addRoutine(){showSheet(`<div class="sheet-head"><h2>新建 Routine</h2><button class="iconbtn" onclick="closeSheet()">×</button></div><div class="field"><label>名称</label><input id="routineTitle"></div><div class="field"><label>步骤（每行一个）</label><textarea id="routineSteps"></textarea></div><button class="primary" onclick="saveRoutine()">保存</button>`)}
-function saveRoutine(){const title=document.getElementById('routineTitle').value.trim(),steps=document.getElementById('routineSteps').value.split('\n').map(x=>x.trim()).filter(Boolean);if(!title)return;routines.push({id:Date.now(),title,steps});persist();openRoutine()}
-function openMySpace(){
- showSheet(`<div class="sheet-head"><h2>My Space</h2><button class="iconbtn" onclick="closeSheet()">×</button></div>
- <div class="row menu-row tap" onclick="openHabit()"><span>🌱 Habit</span><span>›</span></div>
- <div class="row menu-row tap" onclick="openRoutine()"><span>🔄 Routine</span><span>›</span></div>
- <div class="row menu-row tap" onclick="closeSheet();switchView('plan');setTimeout(()=>document.getElementById('anniversaryPreview')?.scrollIntoView({behavior:'smooth'}),50)"><span>♡ Anniversary</span><span>›</span></div>
- <div class="row menu-row tap" onclick="openMoney()"><span>💰 Money</span><span>›</span></div>
- <div class="row menu-row tap" onclick="openHealth()"><span>❤️ Health</span><span>›</span></div>
- <div class="row menu-row tap" onclick="openKnowledge()"><span>📚 Knowledge</span><span>›</span></div>
- <div class="row menu-row tap" onclick="openSearch()"><span>🔍 Search</span><span>›</span></div>
- <div class="row menu-row tap" onclick="openSettings()"><span>⚙️ Settings</span><span>›</span></div>`);
-}
-function openHabit(){
- showSheet(`<div class="sheet-head"><h2>Habit</h2><button class="iconbtn" onclick="closeSheet()">×</button></div><div class="card">${habits.map(h=>`<div class="row tap" onclick="toggleHabit(${h.id})"><div><strong>${esc(h.title)}</strong><div class="muted">${h.type==='fixed'?'固定型':h.type==='count'?'次数型':'弹性周期型'}</div></div><span class="badge">${h.type==='count'?`${h.count}/${h.goal}`:(h.done?'已完成':'打卡')}</span></div>`).join('')}</div><div style="height:12px"></div><button class="secondary" onclick="addHabit()">＋ 新建 Habit</button>`);
-}
-function toggleHabit(id){const h=habits.find(x=>x.id===id);if(!h)return;if(h.type==='count')h.count=Math.min((h.count||0)+1,h.goal||999);else h.done=!h.done;persist();openHabit();render()}
-function addHabit(){showSheet(`<div class="sheet-head"><h2>新建 Habit</h2><button class="iconbtn" onclick="closeSheet()">×</button></div><div class="field"><label>名称</label><input id="habitTitle"></div><div class="field"><label>类型</label><select id="habitType"><option value="fixed">固定型</option><option value="count">次数型</option><option value="flex">弹性周期型</option></select></div><button class="primary" onclick="saveHabit()">保存</button>`)}
-function saveHabit(){const title=document.getElementById('habitTitle').value.trim(),type=document.getElementById('habitType').value;if(!title)return;habits.push({id:Date.now(),title,type,done:false,goal:type==='count'?3:undefined,count:0});persist();openHabit();render()}
-function openMoney(){const total=money.reduce((a,b)=>a+(Number(b.amount)||0),0);showSheet(`<div class="sheet-head"><h2>Money</h2><button class="iconbtn" onclick="closeSheet()">×</button></div><div class="card"><div class="row"><span>已记录支出</span><strong>¥${total.toFixed(2)}</strong></div><div class="row"><span>记录数</span><span>${money.length}</span></div></div><div style="height:12px"></div><button class="primary" onclick="openAdd('money')">＋ 记一笔</button>`)}
-function openHealth(){const latest=weight[weight.length-1];showSheet(`<div class="sheet-head"><h2>Health</h2><button class="iconbtn" onclick="closeSheet()">×</button></div><div class="card"><div class="row"><span>最新体重</span><strong>${latest?latest.value+' kg':'暂无'}</strong></div><div class="row"><span>生理期</span><span class="muted">入口已接通，完整周期页后续补齐</span></div></div><div style="height:12px"></div><button class="primary" onclick="openAdd('weight')">记录体重</button>`)}
-function openKnowledge(){showSheet(`<div class="sheet-head"><h2>Knowledge</h2><button class="iconbtn" onclick="closeSheet()">×</button></div><div class="section-note">入口已修复；完整知识库页面后续继续开发。</div>`)}
-function openSearch(){showSheet(`<div class="sheet-head"><h2>Search</h2><button class="iconbtn" onclick="closeSheet()">×</button></div><div class="field"><input id="globalSearch" placeholder="搜索 Life / Plan" oninput="runSearch(this.value)"></div><div id="searchResults" class="card"><div class="muted">输入关键词开始搜索。</div></div>`)}
-function runSearch(q){q=q.trim().toLowerCase();const box=document.getElementById('searchResults');if(!q){box.innerHTML='<div class="muted">输入关键词开始搜索。</div>';return;}const r=[];plans.filter(x=>x.title.toLowerCase().includes(q)).forEach(x=>r.push(`Plan · ${esc(x.title)}`));life.filter(x=>(x.text||'').toLowerCase().includes(q)).forEach(x=>r.push(`Life · ${esc(x.text)}`));box.innerHTML=r.length?r.map(x=>`<div class="row"><span>${x}</span></div>`).join(''):'<div class="muted">没有找到。</div>'}
-function openSettings(){showSheet(`<div class="sheet-head"><h2>Settings</h2><button class="iconbtn" onclick="closeSheet()">×</button></div><div class="row tap" onclick="openBackup()"><span>数据与备份</span><span>›</span></div><div class="row"><span>版本</span><span class="muted">v0.3</span></div>`)}
-function openFocusSheet(planId=null){
-  const p=planId?plans.find(x=>x.id===planId):null;
-  showSheet(`
-    <div class="sheet-head"><h2>开始专注</h2><button class="iconbtn" onclick="closeSheet()">×</button></div>
-    ${p?`<div class="card" style="margin-bottom:12px"><strong>${esc(p.title)}</strong><div class="muted">已关联 Plan</div></div>`:''}
-    <div class="quick-grid">
-      <button class="qitem" onclick="beginFocus(25,${planId||'null'})"><span class="emo">🍅</span>番茄 25</button>
-      <button class="qitem" onclick="beginFocus(45,${planId||'null'})"><span class="emo">⏳</span>倒计时 45</button>
-      <button class="qitem" onclick="beginFocus(0,${planId||'null'})"><span class="emo">⏱</span>正计时</button>
-    </div>`);
-}
-function startFocusForPlan(id){openFocusSheet(id)}
-function beginFocus(minutes,planId){
-  focusStart=Date.now(); focusElapsed=0; focusRunning=true;
-  window.focusMode=minutes===0?'countup':'countdown';
-  window.focusTarget=minutes*60;
-  window.focusPlanId=planId;
-  closeSheet();
-  document.getElementById('floatFocus').classList.add('show');
-  tickFocus();
-  clearInterval(focusTimer); focusTimer=setInterval(tickFocus,1000);
-}
-function tickFocus(){
-  if(!focusRunning)return;
-  const sec=Math.floor((Date.now()-focusStart)/1000)+focusElapsed;
-  let display=sec;
-  if(window.focusMode==='countdown'){display=Math.max(0,window.focusTarget-sec); if(display<=0){finishFocus();return}}
-  document.getElementById('floatTime').textContent=`${String(Math.floor(display/60)).padStart(2,'0')}:${String(display%60).padStart(2,'0')}`;
-}
-function openRunningFocus(){
-  if(!focusRunning) return openAdd('focus');
-  const sec=Math.floor((Date.now()-focusStart)/1000)+focusElapsed;
-  showSheet(`
-    <div class="sheet-head"><h2>专注中</h2><button class="iconbtn" onclick="closeSheet()">×</button></div>
-    <div style="font-size:44px;text-align:center;margin:28px 0">${document.getElementById('floatTime').textContent}</div>
-    <button class="primary" onclick="finishFocus()">结束并保存</button>
-    <div style="height:10px"></div>
-    <button class="secondary" onclick="closeSheet()">继续专注</button>`);
-}
-function finishFocus(){
-  if(!focusRunning)return;
-  const sec=Math.floor((Date.now()-focusStart)/1000)+focusElapsed;
-  const mins=Math.max(1,Math.round(sec/60));
-  focus.push({id:Date.now(),minutes:mins,planId:window.focusPlanId||null});
-  focusRunning=false; clearInterval(focusTimer);
-  document.getElementById('floatFocus').classList.remove('show'); persist(); closeSheet(); render();
-}
+function archiveMonth(n){archiveDate=new Date(archiveDate.getFullYear(),archiveDate.getMonth()+n,1);renderArchive()}
+function saveMonthNote(){const ym=`${archiveDate.getFullYear()}-${String(archiveDate.getMonth()+1).padStart(2,'0')}`;monthNotes[ym]=monthNote.value;S.set('monthNotes',monthNotes)}
+
+// init
 render();
 </script>
-<script>if('serviceWorker' in navigator){navigator.serviceWorker.register('./sw.js').catch(()=>{})}</script></body>
+<script>
+if('serviceWorker'in navigator){window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js?v=04').catch(()=>{}))}
+</script>
+</body>
 </html>
