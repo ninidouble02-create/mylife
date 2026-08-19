@@ -1,0 +1,524 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
+<meta name="theme-color" content="#faf8f3">
+<title>My Life OS v0.2</title>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="My Life OS">
+<link rel="apple-touch-icon" href="icons/icon-180.png">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="manifest" href="manifest.webmanifest">
+<style>
+:root{
+  --bg:#faf8f3;--panel:#fffdfa;--text:#22211f;--muted:#8a857d;--line:#e9e4dc;
+  --accent:#7f8a6d;--accent-2:#ece8dd;--danger:#b66a61;--shadow:0 6px 24px rgba(67,61,50,.05);
+  --radius:20px;
+}
+*{box-sizing:border-box} html,body{margin:0;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Helvetica Neue",Arial,sans-serif}
+body{min-height:100vh} button,input,textarea,select{font:inherit}
+.app{max-width:430px;margin:0 auto;min-height:100vh;padding:env(safe-area-inset-top) 16px calc(92px + env(safe-area-inset-bottom))}
+.topbar{display:flex;align-items:center;justify-content:space-between;padding:14px 2px 6px}
+.iconbtn{border:0;background:transparent;font-size:22px;color:var(--text);padding:8px}
+h1{font-size:36px;line-height:1.1;margin:12px 0 4px;letter-spacing:-1px}
+.sub{color:var(--muted);font-size:14px;margin-bottom:22px}
+.section{margin:16px 0}
+.section-title{display:flex;justify-content:space-between;align-items:center;font-size:13px;letter-spacing:.08em;color:var(--muted);text-transform:uppercase;margin:0 4px 8px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:16px;box-shadow:var(--shadow)}
+.row{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 0}
+.row+.row{border-top:1px solid var(--line)}
+.left{display:flex;align-items:center;gap:10px;min-width:0}
+.check{width:22px;height:22px;border:1.5px solid #bbb4aa;border-radius:50%;display:inline-grid;place-items:center;flex:0 0 auto;background:#fff}
+.check.done{background:var(--accent);border-color:var(--accent);color:white}
+.check.done:after{content:"✓";font-size:14px}
+.muted{color:var(--muted);font-size:13px}
+.badge{background:var(--accent-2);padding:6px 10px;border-radius:999px;font-size:12px;color:#686258}
+.progress{height:5px;background:#ece8e1;border-radius:999px;overflow:hidden;margin:12px 0 8px}
+.progress>span{display:block;height:100%;background:var(--accent);width:40%}
+.plan-text{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.focus-link{border:0;background:#f2eee6;border-radius:999px;padding:7px 10px;color:#5d5a51}
+.hint{display:flex;align-items:center;justify-content:space-between;padding:12px 0}
+.hint+.hint{border-top:1px solid var(--line)}
+.quickadd{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(74px + env(safe-area-inset-bottom));width:min(398px,calc(100vw - 24px));background:rgba(255,253,250,.98);backdrop-filter:blur(18px);border:1px solid var(--line);border-radius:26px;padding:14px;box-shadow:0 18px 50px rgba(50,44,34,.18);display:none;z-index:30}
+.quickadd.show{display:block}
+.quick-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.qitem{border:1px solid var(--line);background:#fff;border-radius:16px;padding:12px 8px;text-align:center}
+.qitem .emo{font-size:22px;display:block;margin-bottom:5px}
+.sheet{position:fixed;inset:0;background:rgba(25,23,20,.22);display:none;z-index:40;align-items:flex-end;justify-content:center}
+.sheet.show{display:flex}
+.sheet-card{width:min(430px,100vw);max-height:82vh;overflow:auto;background:var(--panel);border-radius:28px 28px 0 0;padding:18px 18px calc(24px + env(safe-area-inset-bottom));box-shadow:0 -20px 60px rgba(0,0,0,.12)}
+.sheet-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
+.sheet-head h2{margin:0;font-size:20px}
+.field{margin:14px 0}.field label{display:block;font-size:13px;color:var(--muted);margin-bottom:6px}
+.field input,.field textarea,.field select{width:100%;border:1px solid var(--line);border-radius:14px;background:#fff;padding:12px;color:var(--text);outline:none}
+.field textarea{min-height:96px;resize:vertical}
+.primary{width:100%;border:0;border-radius:16px;padding:13px;background:var(--text);color:white;font-weight:600}
+.secondary{width:100%;border:1px solid var(--line);border-radius:16px;padding:12px;background:#fff;color:var(--text)}
+.nav{position:fixed;left:50%;transform:translateX(-50%);bottom:0;width:min(430px,100vw);padding:8px 10px calc(8px + env(safe-area-inset-bottom));display:grid;grid-template-columns:repeat(5,1fr);background:rgba(250,248,243,.94);backdrop-filter:blur(18px);border-top:1px solid var(--line);z-index:20}
+.nav button{border:0;background:transparent;color:var(--muted);font-size:11px;padding:6px 0}
+.nav button.active{color:var(--text);font-weight:600}
+.nav .plus{width:50px;height:50px;margin:-20px auto 0;border-radius:50%;background:var(--text);color:white;font-size:28px;box-shadow:0 8px 20px rgba(0,0,0,.16)}
+.view{display:none}.view.active{display:block}
+.calendar{display:grid;grid-template-columns:repeat(7,1fr);gap:8px;font-size:13px;text-align:center}
+.calendar .dow{color:var(--muted);font-size:11px}
+.day{padding:8px 0;border-radius:12px;position:relative}
+.day.today{background:var(--text);color:white}
+.day.dot:after{content:"";position:absolute;left:50%;bottom:2px;transform:translateX(-50%);width:4px;height:4px;background:var(--accent);border-radius:50%}
+.life-item{padding:14px 0}.life-item+.life-item{border-top:1px solid var(--line)}
+.life-time{font-size:12px;color:var(--muted);margin-bottom:6px}
+.photo{width:100%;height:150px;border-radius:16px;background:linear-gradient(135deg,#e8e1d5,#f5f0e7);display:grid;place-items:center;color:#9a9288;margin-top:8px}
+.archive-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.stat{background:#fff;border:1px solid var(--line);border-radius:16px;padding:14px}
+.stat strong{display:block;font-size:22px;margin-top:4px}
+.float-focus{position:fixed;right:max(18px,calc((100vw - 430px)/2 + 18px));bottom:calc(88px + env(safe-area-inset-bottom));z-index:25;background:var(--text);color:white;border:0;border-radius:999px;padding:10px 14px;box-shadow:0 8px 24px rgba(0,0,0,.18);display:none}
+.float-focus.show{display:block}
+.small{font-size:12px}.hidden{display:none}
+.anniv-card{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.anniv-main{min-width:0}.anniv-title{font-weight:600;margin-bottom:3px}.anniv-meta{font-size:12px;color:var(--muted)}
+.countdown{font-size:12px;background:#f3eee6;border-radius:999px;padding:7px 9px;white-space:nowrap}
+.segmented{display:flex;gap:6px;background:#f1ede6;padding:4px;border-radius:14px}
+.segmented button{flex:1;border:0;background:transparent;border-radius:10px;padding:8px;color:var(--muted)}
+.segmented button.active{background:#fff;color:var(--text);box-shadow:0 2px 8px rgba(0,0,0,.05)}
+
+hr{border:0;border-top:1px solid var(--line);margin:14px 0}
+</style>
+</head>
+<body>
+<div class="app">
+  <section id="today" class="view active">
+    <div class="topbar"><button class="iconbtn" onclick="openMySpace()">☰</button><button class="iconbtn" onclick="switchView('plan')">⌗</button></div>
+    <h1>Today</h1>
+    <div class="sub" id="todayDate"></div>
+
+    <div class="section">
+      <div class="section-title"><span>My Day</span><span class="badge">上班日</span></div>
+      <div class="card">
+        <div class="row"><div><strong>Morning</strong><div class="muted">现在 · 进行中</div></div><div class="badge">2 / 5</div></div>
+        <div class="progress"><span></span></div>
+        <div class="row"><div><div class="muted">下一步</div><strong>晨间护肤</strong></div><button class="focus-link" onclick="openRoutine()">继续 ›</button></div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title"><span>今日计划</span><span id="planCount">0 / 0</span></div>
+      <div class="card" id="todayPlans"></div>
+    </div>
+
+    <div class="section">
+      <div class="section-title"><span>今天</span><span>轻提醒</span></div>
+      <div class="card">
+        <div id="todayAnniversary"></div>
+        <div class="hint"><span>📖 阅读</span><span class="muted">未完成</span></div>
+        <div class="hint"><span>🏃 运动</span><span class="muted">本周 2 / 3</span></div>
+        <div class="hint"><span>🧖 面膜</span><span class="muted">距上次 3 天 · 建议今天</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="plan" class="view">
+    <div class="topbar"><button class="iconbtn" onclick="switchView('today')">‹</button><button class="iconbtn" onclick="openAdd('plan')">＋</button></div>
+    <h1>Plan</h1>
+    <div class="sub">日历 + 列表</div>
+    <div class="card">
+      <div class="row"><strong id="monthLabel"></strong><span class="muted">月视图</span></div>
+      <div class="calendar" id="calendar"></div>
+    </div>
+    <div class="section">
+      <div class="section-title"><span>今天</span><span id="planListCount"></span></div>
+      <div class="card" id="planList"></div>
+    </div>
+    <div class="section">
+      <div class="section-title"><span>Anniversary</span><span id="anniversaryCount">0</span></div>
+      <div class="card" id="anniversaryPreview"></div>
+    </div>
+
+    <div class="section">
+      <div class="section-title"><span>Plan Pool</span><span>6</span></div>
+      <div class="card">
+        <div class="row"><span>洗牙</span><span class="muted">未安排</span></div>
+        <div class="row"><span>整理旧照片</span><span class="muted">未安排</span></div>
+        <div class="row"><span>买收纳盒</span><span class="muted">未安排</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="life" class="view">
+    <div class="topbar"><button class="iconbtn">☰</button><button class="iconbtn" onclick="openAdd('life')">＋</button></div>
+    <h1>Life</h1>
+    <div class="sub">私人生活流</div>
+    <div id="lifeFeed"></div>
+  </section>
+
+  <section id="archive" class="view">
+    <div class="topbar"><button class="iconbtn">‹</button><button class="iconbtn">⌕</button></div>
+    <h1>Archive</h1>
+    <div class="sub">我的这个月</div>
+    <div class="archive-grid">
+      <div class="stat"><span class="muted">Life</span><strong id="lifeStat">0</strong><span class="muted">条记录</span></div>
+      <div class="stat"><span class="muted">Plan</span><strong id="planStat">0</strong><span class="muted">已完成</span></div>
+      <div class="stat"><span class="muted">Focus</span><strong id="focusStat">0m</strong><span class="muted">本月累计</span></div>
+      <div class="stat"><span class="muted">Drinks</span><strong id="drinkStat">0</strong><span class="muted">杯</span></div>
+      <div class="stat"><span class="muted">Anniversary</span><strong id="anniversaryStat">0</strong><span class="muted">个纪念日</span></div>
+    </div>
+    <div class="section">
+      <div class="section-title"><span>这个月</span><span>Mood</span></div>
+      <div class="card"><div style="font-size:28px;letter-spacing:8px">🙂 😌 😴 🙂 😊 😐 😌</div><div class="muted" style="margin-top:10px">先用极简摘要，后续再做完整月历。</div></div>
+    </div>
+  </section>
+</div>
+
+<button id="floatFocus" class="float-focus" onclick="openRunningFocus()">⏱ <span id="floatTime">00:00</span></button>
+
+<div id="quickAdd" class="quickadd">
+  <div class="section-title" style="margin-bottom:10px"><span>快速添加</span><button class="iconbtn" style="font-size:18px" onclick="toggleQuickAdd()">×</button></div>
+  <div class="quick-grid">
+    <button class="qitem" onclick="openAdd('money')"><span class="emo">💰</span>记一笔</button>
+    <button class="qitem" onclick="openAdd('life')"><span class="emo">💭</span>记录</button>
+    <button class="qitem" onclick="openAdd('weight')"><span class="emo">⚖️</span>体重</button>
+    <button class="qitem" onclick="openAdd('plan')"><span class="emo">📅</span>计划</button>
+    <button class="qitem" onclick="openAdd('drink')"><span class="emo">🧋</span>饮品</button>
+    <button class="qitem" onclick="openAdd('focus')"><span class="emo">⏱</span>专注</button>
+    <button class="qitem" onclick="openAdd('anniversary')"><span class="emo">♡</span>纪念日</button>
+  </div>
+</div>
+
+<div id="sheet" class="sheet" onclick="if(event.target===this) closeSheet()">
+  <div class="sheet-card" id="sheetCard"></div>
+</div>
+
+<nav class="nav">
+  <button data-view="today" class="active" onclick="switchView('today')">⌂<br>Today</button>
+  <button data-view="plan" onclick="switchView('plan')">▣<br>Plan</button>
+  <button class="plus" onclick="toggleQuickAdd()">＋</button>
+  <button data-view="life" onclick="switchView('life')">◌<br>Life</button>
+  <button data-view="archive" onclick="switchView('archive')">▤<br>Archive</button>
+</nav>
+
+<script>
+const store = {
+  get(k,d){try{return JSON.parse(localStorage.getItem(k)) ?? d}catch(e){return d}},
+  set(k,v){localStorage.setItem(k,JSON.stringify(v))}
+};
+let plans = store.get('plans', [
+  {id:1,title:'学习药理学',done:false,focus:true},
+  {id:2,title:'买日用品',done:false},
+  {id:3,title:'整理衣柜',done:false},
+  {id:4,title:'整理药盒',done:true}
+]);
+let life = store.get('life', [
+  {id:1,time:'09:16',text:'今天早上居然没那么困',type:'life'},
+  {id:2,time:'18:27',text:'下班看到的天空很好看。',type:'life'},
+  {id:3,time:'21:35',text:'霸王茶姬 · 伯牙绝弦 ★★★★☆',type:'drink',amount:18}
+]);
+let money = store.get('money', []);
+let weight = store.get('weight', []);
+let focus = store.get('focus', []);
+let anniversaries = store.get('anniversaries', [
+  {id:101,title:'我的生日',date:'2002-08-02',calendar:'solar',repeat:'yearly',mode:'countdown',remindDays:7,note:''}
+]);
+let focusTimer = null, focusStart = null, focusElapsed = 0, focusRunning = false;
+
+function persist(){store.set('plans',plans);store.set('life',life);store.set('money',money);store.set('weight',weight);store.set('focus',focus);store.set('anniversaries',anniversaries)}
+function esc(s=''){return s.replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]))}
+function fmtDate(){
+  const d=new Date(); const wd=['日','一','二','三','四','五','六'][d.getDay()];
+  return `${d.getMonth()+1}月${d.getDate()}日 · 星期${wd}`;
+}
+document.getElementById('todayDate').textContent=fmtDate();
+document.getElementById('monthLabel').textContent=`${new Date().getFullYear()}年 ${new Date().getMonth()+1}月`;
+
+function switchView(id){
+  document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  document.querySelectorAll('.nav button[data-view]').forEach(b=>b.classList.toggle('active',b.dataset.view===id));
+  document.getElementById('quickAdd').classList.remove('show');
+  render();
+  scrollTo(0,0);
+}
+function toggleQuickAdd(){document.getElementById('quickAdd').classList.toggle('show')}
+function render(){
+  renderPlans(); renderLife(); renderArchive(); renderCalendar(); renderAnniversaries(); renderTodayAnniversary();
+}
+function renderPlans(){
+  const mk = p => `<div class="row">
+    <div class="left"><button class="check ${p.done?'done':''}" onclick="togglePlan(${p.id})"></button><span class="plan-text ${p.done?'muted':''}">${esc(p.title)}</span></div>
+    ${p.focus && !p.done?`<button class="focus-link" onclick="startFocusForPlan(${p.id})">▶ 专注</button>`:''}
+  </div>`;
+  document.getElementById('todayPlans').innerHTML = plans.map(mk).join('') + `<div class="row"><button class="iconbtn" style="font-size:16px" onclick="openAdd('plan')">＋ 添加计划</button></div>`;
+  document.getElementById('planList').innerHTML = plans.map(mk).join('');
+  const done=plans.filter(p=>p.done).length;
+  document.getElementById('planCount').textContent=`${done} / ${plans.length}`;
+  document.getElementById('planListCount').textContent=`${plans.length} 项`;
+}
+function togglePlan(id){const p=plans.find(x=>x.id===id); p.done=!p.done; persist(); render()}
+function renderLife(){
+  document.getElementById('lifeFeed').innerHTML = life.slice().reverse().map(x=>`
+    <div class="life-item">
+      <div class="life-time">${esc(x.time||'此刻')}</div>
+      <div>${esc(x.text||'')}</div>
+      ${x.type==='drink'?'<div class="photo">饮品记录 · 可后续接照片抠图</div>':''}${x.type==='anniversary'?'<div class="muted" style="margin-top:6px">纪念日记录</div>':''}
+    </div>`).join('') || `<div class="muted">还没有记录。</div>`;
+}
+function renderArchive(){
+  document.getElementById('lifeStat').textContent=life.length;
+  document.getElementById('planStat').textContent=plans.filter(x=>x.done).length;
+  document.getElementById('drinkStat').textContent=life.filter(x=>x.type==='drink').length;
+  document.getElementById('anniversaryStat').textContent=anniversaries.length;
+  const mins=focus.reduce((a,b)=>a+(b.minutes||0),0);
+  document.getElementById('focusStat').textContent=mins<60?`${mins}m`:`${Math.floor(mins/60)}h ${mins%60}m`;
+}
+function renderCalendar(){
+  const d=new Date(), y=d.getFullYear(), m=d.getMonth(), first=new Date(y,m,1).getDay(), days=new Date(y,m+1,0).getDate();
+  let html=['日','一','二','三','四','五','六'].map(x=>`<div class="dow">${x}</div>`).join('');
+  for(let i=0;i<first;i++) html+='<div></div>';
+  for(let day=1;day<=days;day++) html+=`<div class="day ${day===d.getDate()?'today':''} ${(day%3===0)?'dot':''}">${day}</div>`;
+  document.getElementById('calendar').innerHTML=html;
+}
+function closeSheet(){document.getElementById('sheet').classList.remove('show')}
+function showSheet(html){document.getElementById('sheetCard').innerHTML=html;document.getElementById('sheet').classList.add('show');document.getElementById('quickAdd').classList.remove('show')}
+function openAdd(type){
+  if(type==='plan') return showSheet(`
+    <div class="sheet-head"><h2>新建计划</h2><button class="iconbtn" onclick="closeSheet()">×</button></div>
+    <div class="field"><label>做什么？</label><input id="planTitle" placeholder="例如：学习药理学"></div>
+    <div class="field"><label><input type="checkbox" id="planFocus"> 可以直接专注</label></div>
+    <button class="primary" onclick="savePlan()">保存</button>`);
+  if(type==='life') return showSheet(`
+    <div class="sheet-head"><h2>记录此刻</h2><button class="iconbtn" onclick="closeSheet()">×</button></div>
+    <div class="field"><textarea id="lifeText" placeholder="想记点什么……"></textarea></div>
+    <button class="primary" onclick="saveLife()">发布</button>`);
+  if(type==='money') return showSheet(`
+    <div class="sheet-head"><h2>记一笔</h2><button class="iconbtn" onclick="closeSheet()">×</button></div>
+    <div class="field"><label>金额</label><input id="moneyAmount" inputmode="decimal" placeholder="0.00"></div>
+    <div class="field"><label>分类</label><select id="moneyCat"><option>餐饮</option><option>饮品</option><option>购物</option><option>交通</option><option>美妆护肤</option><option>其他</option></select></div>
+    <div class="field"><label>备注（可选）</label><input id="moneyNote"></div>
+    <button class="primary" onclick="saveMoney()">保存</button>`);
+  if(type==='weight') return showSheet(`
+    <div class="sheet-head"><h2>记录体重</h2><button class="iconbtn" onclick="closeSheet()">×</button></div>
+    <div class="field"><label>kg</label><input id="weightVal" inputmode="decimal" placeholder="52.4"></div>
+    <button class="primary" onclick="saveWeight()">保存</button>`);
+  if(type==='drink') return showSheet(`
+    <div class="sheet-head"><h2>饮品打卡</h2><button class="iconbtn" onclick="closeSheet()">×</button></div>
+    <div class="field"><label>品牌</label><input id="drinkBrand" placeholder="霸王茶姬"></div>
+    <div class="field"><label>饮品</label><input id="drinkName" placeholder="伯牙绝弦"></div>
+    <div class="field"><label>评分</label><select id="drinkRate"><option>★★★★★</option><option>★★★★☆</option><option>★★★☆☆</option><option>★★☆☆☆</option><option>★☆☆☆☆</option></select></div>
+    <div class="field"><label>价格（可选）</label><input id="drinkPrice" inputmode="decimal" placeholder="18"></div>
+    <button class="primary" onclick="saveDrink()">保存</button>`);
+  if(type==='anniversary') return showSheet(`
+    <div class="sheet-head"><h2>新建纪念日</h2><button class="iconbtn" onclick="closeSheet()">×</button></div>
+    <div class="field"><label>纪念日名称</label><input id="annivTitle" placeholder="例如：妈妈生日、第一次旅行"></div>
+    <div class="field"><label>日期</label><input id="annivDate" type="date"></div>
+    <div class="field"><label>历法</label><select id="annivCalendar"><option value="solar">公历</option><option value="lunar">农历（V0.2 先记录，后续完善换算）</option></select></div>
+    <div class="field"><label>重复</label><select id="annivRepeat"><option value="yearly">每年</option><option value="monthly">每月</option><option value="none">不重复</option></select></div>
+    <div class="field"><label>显示方式</label><select id="annivMode"><option value="countdown">距离下一次还有多久</option><option value="elapsed">已经过去多少天</option></select></div>
+    <div class="field"><label>提前提醒</label><select id="annivRemind"><option value="0">当天</option><option value="1">提前 1 天</option><option value="3">提前 3 天</option><option value="7" selected>提前 7 天</option><option value="30">提前 30 天</option></select></div>
+    <div class="field"><label>备注（可选）</label><textarea id="annivNote" placeholder="想记住的事情……"></textarea></div>
+    <button class="primary" onclick="saveAnniversary()">保存纪念日</button>`);
+  if(type==='focus') return openFocusSheet(null);
+}
+
+function localDateKey(d){
+  return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+}
+function startOfDay(d){ return new Date(d.getFullYear(),d.getMonth(),d.getDate()); }
+function daysBetween(a,b){ return Math.round((startOfDay(b)-startOfDay(a))/86400000); }
+
+function nextOccurrence(a, now=new Date()){
+  const raw=new Date(a.date+'T00:00:00');
+  if(Number.isNaN(raw.getTime())) return null;
+  // Lunar is stored in V0.2; real lunar conversion will be added later.
+  if(a.repeat==='none') return raw;
+  if(a.repeat==='monthly'){
+    let n=new Date(now.getFullYear(), now.getMonth(), raw.getDate());
+    if(n < startOfDay(now)) n=new Date(now.getFullYear(), now.getMonth()+1, raw.getDate());
+    return n;
+  }
+  let n=new Date(now.getFullYear(), raw.getMonth(), raw.getDate());
+  if(n < startOfDay(now)) n=new Date(now.getFullYear()+1, raw.getMonth(), raw.getDate());
+  return n;
+}
+function anniversaryLabel(a){
+  const now=new Date(), raw=new Date(a.date+'T00:00:00');
+  if(a.mode==='elapsed'){
+    const d=Math.max(0,daysBetween(raw,now));
+    return `已经 ${d} 天`;
+  }
+  const n=nextOccurrence(a,now);
+  if(!n) return '';
+  const d=daysBetween(now,n);
+  return d===0?'就是今天':`还有 ${d} 天`;
+}
+function renderAnniversaries(){
+  const box=document.getElementById('anniversaryPreview');
+  if(!box) return;
+  document.getElementById('anniversaryCount').textContent=anniversaries.length;
+  const sorted=anniversaries.slice().sort((a,b)=>{
+    const na=nextOccurrence(a)||new Date('2999-01-01'), nb=nextOccurrence(b)||new Date('2999-01-01');
+    return na-nb;
+  });
+  box.innerHTML=(sorted.slice(0,3).map(a=>`
+    <div class="row" onclick="openAnniversary(${a.id})">
+      <div class="anniv-main"><div class="anniv-title">♡ ${esc(a.title)}</div><div class="anniv-meta">${esc(a.date)} · ${a.calendar==='lunar'?'农历':'公历'} · ${a.repeat==='yearly'?'每年':a.repeat==='monthly'?'每月':'不重复'}</div></div>
+      <span class="countdown">${anniversaryLabel(a)}</span>
+    </div>`).join('') || `<div class="muted">还没有纪念日。</div>`) +
+    `<div class="row"><button class="iconbtn" style="font-size:16px" onclick="event.stopPropagation();openAdd('anniversary')">＋ 添加纪念日</button></div>`;
+}
+function renderTodayAnniversary(){
+  const box=document.getElementById('todayAnniversary');
+  if(!box) return;
+  const now=new Date();
+  const upcoming=anniversaries.map(a=>({a,n:nextOccurrence(a,now)}))
+    .filter(x=>x.n && daysBetween(now,x.n)>=0 && daysBetween(now,x.n)<=Number(x.a.remindDays ?? 7))
+    .sort((x,y)=>x.n-y.n);
+  if(!upcoming.length){ box.innerHTML=''; return; }
+  box.innerHTML=upcoming.map(({a,n})=>{
+    const d=daysBetween(now,n);
+    return `<div class="hint" onclick="openAnniversary(${a.id})"><span>♡ ${esc(a.title)}</span><span class="muted">${d===0?'今天':`还有 ${d} 天`}</span></div>`;
+  }).join('');
+}
+function saveAnniversary(){
+  const title=document.getElementById('annivTitle').value.trim();
+  const date=document.getElementById('annivDate').value;
+  if(!title || !date){ alert('请填写名称和日期'); return; }
+  anniversaries.push({
+    id:Date.now(), title, date,
+    calendar:document.getElementById('annivCalendar').value,
+    repeat:document.getElementById('annivRepeat').value,
+    mode:document.getElementById('annivMode').value,
+    remindDays:Number(document.getElementById('annivRemind').value),
+    note:document.getElementById('annivNote').value.trim()
+  });
+  persist(); closeSheet(); render();
+}
+function openAnniversary(id){
+  const a=anniversaries.find(x=>x.id===id); if(!a) return;
+  showSheet(`
+    <div class="sheet-head"><h2>${esc(a.title)}</h2><button class="iconbtn" onclick="closeSheet()">×</button></div>
+    <div class="card">
+      <div class="row"><span>日期</span><strong>${esc(a.date)}</strong></div>
+      <div class="row"><span>历法</span><span>${a.calendar==='lunar'?'农历':'公历'}</span></div>
+      <div class="row"><span>重复</span><span>${a.repeat==='yearly'?'每年':a.repeat==='monthly'?'每月':'不重复'}</span></div>
+      <div class="row"><span>现在</span><strong>${anniversaryLabel(a)}</strong></div>
+      ${a.note?`<div class="row"><span>备注</span><span class="muted">${esc(a.note)}</span></div>`:''}
+    </div>
+    <div style="height:12px"></div>
+    <button class="primary" onclick="recordAnniversary(${a.id})">记下今天</button>
+    <div style="height:10px"></div>
+    <button class="secondary" onclick="deleteAnniversary(${a.id})">删除纪念日</button>`);
+}
+function recordAnniversary(id){
+  const a=anniversaries.find(x=>x.id===id); if(!a) return;
+  const now=new Date();
+  life.push({id:Date.now(),time:now.toTimeString().slice(0,5),text:`♡ ${a.title}`,type:'anniversary',anniversaryId:id});
+  persist(); closeSheet(); render();
+}
+function deleteAnniversary(id){
+  if(!confirm('删除这个纪念日？')) return;
+  anniversaries=anniversaries.filter(x=>x.id!==id);
+  persist(); closeSheet(); render();
+}
+
+function savePlan(){
+  const t=document.getElementById('planTitle').value.trim(); if(!t)return;
+  plans.push({id:Date.now(),title:t,done:false,focus:document.getElementById('planFocus').checked}); persist(); closeSheet(); render();
+}
+function saveLife(){
+  const t=document.getElementById('lifeText').value.trim(); if(!t)return;
+  const now=new Date(); life.push({id:Date.now(),time:now.toTimeString().slice(0,5),text:t,type:'life'}); persist(); closeSheet(); render();
+}
+function saveMoney(){
+  const a=parseFloat(document.getElementById('moneyAmount').value); if(!a)return;
+  money.push({id:Date.now(),amount:a,cat:document.getElementById('moneyCat').value,note:document.getElementById('moneyNote').value}); persist(); closeSheet();
+  alert('已记账');
+}
+function saveWeight(){
+  const v=parseFloat(document.getElementById('weightVal').value); if(!v)return;
+  weight.push({id:Date.now(),value:v,date:new Date().toISOString()}); persist(); closeSheet();
+  alert('体重已记录');
+}
+function saveDrink(){
+  const b=document.getElementById('drinkBrand').value.trim(), n=document.getElementById('drinkName').value.trim();
+  if(!b && !n)return;
+  const r=document.getElementById('drinkRate').value, p=parseFloat(document.getElementById('drinkPrice').value)||0;
+  const now=new Date(); life.push({id:Date.now(),time:now.toTimeString().slice(0,5),text:`${b}${b&&n?' · ':''}${n} ${r}`,type:'drink',amount:p});
+  if(p) money.push({id:Date.now()+1,amount:p,cat:'饮品',note:`${b} ${n}`});
+  persist(); closeSheet(); render();
+}
+function openRoutine(){
+  showSheet(`
+    <div class="sheet-head"><h2>Today Routine</h2><button class="iconbtn" onclick="closeSheet()">×</button></div>
+    <div class="muted">💼 上班日</div>
+    <hr>
+    <strong>Morning · 2 / 5</strong>
+    <div class="row"><span>✓ 起床</span></div>
+    <div class="row"><span>✓ 洗漱</span></div>
+    <div class="row"><span>○ 晨间护肤</span></div>
+    <div class="row"><span>○ 早餐</span></div>
+    <div class="row"><span>○ 出门</span></div>
+    <hr>
+    <button class="secondary" onclick="closeSheet()">完成 / 返回</button>`);
+}
+function openMySpace(){
+  showSheet(`
+    <div class="sheet-head"><h2>My Space</h2><button class="iconbtn" onclick="closeSheet()">×</button></div>
+    <div class="row"><span>🌱 Habit</span><span>›</span></div>
+    <div class="row"><span>🔄 Routine</span><span>›</span></div>
+    <div class="row" onclick="closeSheet();switchView('plan');setTimeout(()=>document.getElementById('anniversaryPreview')?.scrollIntoView({behavior:'smooth'}),50)"><span>♡ Anniversary</span><span>›</span></div>
+    <div class="row"><span>💰 Money</span><span>›</span></div>
+    <div class="row"><span>❤️ Health</span><span>›</span></div>
+    <div class="row"><span>📚 Knowledge</span><span>›</span></div>
+    <div class="row"><span>🔍 Search</span><span>›</span></div>
+    <div class="row"><span>⚙️ Settings</span><span>›</span></div>`);
+}
+function openFocusSheet(planId=null){
+  const p=planId?plans.find(x=>x.id===planId):null;
+  showSheet(`
+    <div class="sheet-head"><h2>开始专注</h2><button class="iconbtn" onclick="closeSheet()">×</button></div>
+    ${p?`<div class="card" style="margin-bottom:12px"><strong>${esc(p.title)}</strong><div class="muted">已关联 Plan</div></div>`:''}
+    <div class="quick-grid">
+      <button class="qitem" onclick="beginFocus(25,${planId||'null'})"><span class="emo">🍅</span>番茄 25</button>
+      <button class="qitem" onclick="beginFocus(45,${planId||'null'})"><span class="emo">⏳</span>倒计时 45</button>
+      <button class="qitem" onclick="beginFocus(0,${planId||'null'})"><span class="emo">⏱</span>正计时</button>
+    </div>`);
+}
+function startFocusForPlan(id){openFocusSheet(id)}
+function beginFocus(minutes,planId){
+  focusStart=Date.now(); focusElapsed=0; focusRunning=true;
+  window.focusMode=minutes===0?'countup':'countdown';
+  window.focusTarget=minutes*60;
+  window.focusPlanId=planId;
+  closeSheet();
+  document.getElementById('floatFocus').classList.add('show');
+  tickFocus();
+  clearInterval(focusTimer); focusTimer=setInterval(tickFocus,1000);
+}
+function tickFocus(){
+  if(!focusRunning)return;
+  const sec=Math.floor((Date.now()-focusStart)/1000)+focusElapsed;
+  let display=sec;
+  if(window.focusMode==='countdown'){display=Math.max(0,window.focusTarget-sec); if(display<=0){finishFocus();return}}
+  document.getElementById('floatTime').textContent=`${String(Math.floor(display/60)).padStart(2,'0')}:${String(display%60).padStart(2,'0')}`;
+}
+function openRunningFocus(){
+  if(!focusRunning) return openAdd('focus');
+  const sec=Math.floor((Date.now()-focusStart)/1000)+focusElapsed;
+  showSheet(`
+    <div class="sheet-head"><h2>专注中</h2><button class="iconbtn" onclick="closeSheet()">×</button></div>
+    <div style="font-size:44px;text-align:center;margin:28px 0">${document.getElementById('floatTime').textContent}</div>
+    <button class="primary" onclick="finishFocus()">结束并保存</button>
+    <div style="height:10px"></div>
+    <button class="secondary" onclick="closeSheet()">继续专注</button>`);
+}
+function finishFocus(){
+  if(!focusRunning)return;
+  const sec=Math.floor((Date.now()-focusStart)/1000)+focusElapsed;
+  const mins=Math.max(1,Math.round(sec/60));
+  focus.push({id:Date.now(),minutes:mins,planId:window.focusPlanId||null});
+  focusRunning=false; clearInterval(focusTimer);
+  document.getElementById('floatFocus').classList.remove('show'); persist(); closeSheet(); render();
+}
+render();
+</script>
+<script>if('serviceWorker' in navigator){navigator.serviceWorker.register('./sw.js').catch(()=>{})}</script></body>
+</html>
