@@ -1,4 +1,4 @@
-# My Life OS PWA v0.4
+# My Life OS PWA v0.5
 
 本版目标：从“入口能点”升级为“核心模块可以真正日常使用”。
 
