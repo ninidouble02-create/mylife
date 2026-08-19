@@ -1,9 +1,15 @@
-# My Life OS v1.2 Stable
+# My Life OS v1.3 — Routine + Habit
 
-稳定测试版：JS/CSS 已直接内置进 index.html，避免 GitHub Pages / Safari 继续混用旧版 app.js 与 style.css。
+基于 v1.2 Stable 的单文件稳定结构继续开发。
 
-## 上传
-把本目录 3 个文件上传到仓库根目录并覆盖：index.html、manifest.webmanifest、README.md。
-旧的 app.js、style.css、sw.js 可以删除；即使暂时保留也不会被 v1.2 调用。
+## 本版完成
+- Routine：新建、编辑、删除、时间、执行星期、步骤清单
+- Routine 步骤可关联 Habit，完成步骤同步打卡
+- Today 只显示当天应执行的 Routine
+- Habit：固定周期、每周/每月次数、弹性周期
+- Habit：Today 打卡/撤销、详情统计、35 天热力图
+- 数据继续保存在本机 localStorage
 
-打开页面顶部应看到 `v1.2 Stable · JS 内置`。点击任意按钮时会短暂显示 `点击正常`，用于判断交互事件是否执行。
+## GitHub Pages 更新
+覆盖 index.html、manifest.webmanifest、README.md 后 Commit。
+页面顶部看到 `v1.3 · Routine + Habit` 即为新版。
