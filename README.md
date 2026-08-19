@@ -1,3 +1,3 @@
-# My Life OS v1.4
+# My Life OS v1.5 Plan Complete
 
-Today + Memo + Life Mood. Built on the stable single-file v1.3 structure.
+Stable single-file build. Adds full Plan month calendar, date ranges, time/note, editable Plan Pool scheduling, and editable anniversaries.
