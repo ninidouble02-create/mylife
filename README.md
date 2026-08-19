@@ -1,3 +1,3 @@
-# My Life OS v1.7
+# My Life OS v1.9 Focus
 
-Adds Life multi-photo upload, location/tags, monthly photo calendar, and Drinks Calendar/Gallery/Stats.
+Adds global Focus timer: countdown/count-up, presets/custom duration, pause/resume, real elapsed-time calculation, Plan/Habit/Knowledge links, session history and stats.
