@@ -1,3 +1,3 @@
-# My Life OS v1.9 Focus
+# My Life OS v1.9.1 Focus Complete
 
-Adds global Focus timer: countdown/count-up, presets/custom duration, pause/resume, real elapsed-time calculation, Plan/Habit/Knowledge links, session history and stats.
+Adds Focus day/week/month summaries, trend chart, time distribution, direct Focus from Plan/Today plan rows, and per-plan focus totals.
