@@ -1,3 +1,3 @@
-# My Life OS v1.7
+# My Life OS v1.8 Life Social
 
-Adds Life multi-photo upload, location/tags, monthly photo calendar, and Drinks Calendar/Gallery/Stats.
+Life redesigned as a private social feed with 1–9 photo layouts, edit/delete, location, tags, optional mood, monthly photo calendar, gallery, and Mood view.
