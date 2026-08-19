@@ -1,3 +1,3 @@
-# My Life OS v1.9.1 Focus Complete
+# My Life OS v2.0 Search + Backup
 
-Adds Focus day/week/month summaries, trend chart, time distribution, direct Focus from Plan/Today plan rows, and per-plan focus totals.
+Adds global cross-module search plus JSON export/import backup and restore.
