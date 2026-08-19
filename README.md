@@ -1,3 +1,3 @@
-# My Life OS v1.5 Plan Complete
+# My Life OS v1.6
 
-Stable single-file build. Adds full Plan month calendar, date ranges, time/note, editable Plan Pool scheduling, and editable anniversaries.
+Adds Health trends, Money budgets/categories/receipts/summary, and Knowledge notes with multiple photos.
