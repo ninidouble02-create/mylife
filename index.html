@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
 <meta name="theme-color" content="#faf8f3">
-<title>My Life OS v0.2</title>
+<title>My Life OS v0.3</title>
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="My Life OS">
@@ -83,6 +83,17 @@ h1{font-size:36px;line-height:1.1;margin:12px 0 4px;letter-spacing:-1px}
 .segmented button.active{background:#fff;color:var(--text);box-shadow:0 2px 8px rgba(0,0,0,.05)}
 
 hr{border:0;border-top:1px solid var(--line);margin:14px 0}
+
+.photo-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:10px}
+.photo-thumb{aspect-ratio:1/1;border-radius:14px;overflow:hidden;background:#eee8de}
+.photo-thumb img{width:100%;height:100%;object-fit:cover;display:block}
+.photo-large{width:100%;border-radius:16px;margin-top:10px;display:block;max-height:380px;object-fit:cover}
+.mood-row{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.mood-btn{border:1px solid var(--line);background:#fff;border-radius:14px;padding:10px 6px;text-align:center}
+.mood-btn .mood-emo{font-size:24px;display:block;margin-bottom:4px}
+.menu-row{min-height:52px}
+.tap{cursor:pointer}
+.section-note{font-size:12px;color:var(--muted);line-height:1.5}
 </style>
 </head>
 <body>
@@ -107,7 +118,16 @@ hr{border:0;border-top:1px solid var(--line);margin:14px 0}
     </div>
 
     <div class="section">
-      <div class="section-title"><span>今天</span><span>轻提醒</span></div>
+      <div class="section">
+      <div class="section-title"><span>Mood</span><span>今天的感觉</span></div>
+      <div class="card">
+        <div class="row">
+          <div><strong id="todayMoodLabel">还没记录今日心情</strong><div class="muted">即时心情 · 可多次记录</div></div>
+          <button class="action-pill" onclick="openMood()">打卡</button>
+        </div>
+      </div>
+    </div>
+    <div class="section-title"><span>今天</span><span>轻提醒</span></div>
       <div class="card">
         <div id="todayAnniversary"></div>
         <div class="hint"><span>📖 阅读</span><span class="muted">未完成</span></div>
@@ -135,12 +155,9 @@ hr{border:0;border-top:1px solid var(--line);margin:14px 0}
     </div>
 
     <div class="section">
-      <div class="section-title"><span>Plan Pool</span><span>6</span></div>
-      <div class="card">
-        <div class="row"><span>洗牙</span><span class="muted">未安排</span></div>
-        <div class="row"><span>整理旧照片</span><span class="muted">未安排</span></div>
-        <div class="row"><span>买收纳盒</span><span class="muted">未安排</span></div>
-      </div>
+      <div class="section-title"><span>Plan Pool</span><span id="planPoolCount">0</span></div>
+      <div class="card" id="planPoolList"></div>
+    </div>
     </div>
   </section>
 
@@ -197,6 +214,33 @@ hr{border:0;border-top:1px solid var(--line);margin:14px 0}
 </nav>
 
 <script>
+const PhotoDB={
+  db:null,
+  async open(){
+    if(this.db) return this.db;
+    this.db=await new Promise((resolve,reject)=>{
+      const req=indexedDB.open('MyLifeOSPhotos',1);
+      req.onupgradeneeded=()=>{if(!req.result.objectStoreNames.contains('photos')) req.result.createObjectStore('photos',{keyPath:'id'});};
+      req.onsuccess=()=>resolve(req.result); req.onerror=()=>reject(req.error);
+    });
+    return this.db;
+  },
+  async put(blob){
+    const db=await this.open(), id='p_'+Date.now()+'_'+Math.random().toString(36).slice(2);
+    return await new Promise((resolve,reject)=>{
+      const tx=db.transaction('photos','readwrite'); tx.objectStore('photos').put({id,blob});
+      tx.oncomplete=()=>resolve(id); tx.onerror=()=>reject(tx.error);
+    });
+  },
+  async get(id){
+    const db=await this.open();
+    return await new Promise((resolve,reject)=>{
+      const req=db.transaction('photos').objectStore('photos').get(id);
+      req.onsuccess=()=>resolve(req.result?.blob||null); req.onerror=()=>reject(req.error);
+    });
+  }
+};
+const photoUrls={};
 const store = {
   get(k,d){try{return JSON.parse(localStorage.getItem(k)) ?? d}catch(e){return d}},
   set(k,v){localStorage.setItem(k,JSON.stringify(v))}
@@ -215,12 +259,25 @@ let life = store.get('life', [
 let money = store.get('money', []);
 let weight = store.get('weight', []);
 let focus = store.get('focus', []);
+let planPool = store.get('planPool', [
+  {id:201,title:'洗牙'},{id:202,title:'整理旧照片'},{id:203,title:'买收纳盒'}
+]);
+let habits = store.get('habits', [
+  {id:301,title:'阅读',type:'fixed',done:false},
+  {id:302,title:'运动',type:'count',goal:3,count:2},
+  {id:303,title:'面膜',type:'flex',done:false}
+]);
+let routines = store.get('routines', [
+  {id:401,title:'Morning',steps:['起床','洗漱','晨间护肤','早餐','出门']},
+  {id:402,title:'晚间护肤',steps:['洁面','爽肤水','精华','面霜']}
+]);
+let moods = store.get('moods', []);
 let anniversaries = store.get('anniversaries', [
   {id:101,title:'我的生日',date:'2002-08-02',calendar:'solar',repeat:'yearly',mode:'countdown',remindDays:7,note:''}
 ]);
 let focusTimer = null, focusStart = null, focusElapsed = 0, focusRunning = false;
 
-function persist(){store.set('plans',plans);store.set('life',life);store.set('money',money);store.set('weight',weight);store.set('focus',focus);store.set('anniversaries',anniversaries)}
+function persist(){store.set('plans',plans);store.set('life',life);store.set('money',money);store.set('weight',weight);store.set('focus',focus);store.set('anniversaries',anniversaries);store.set('planPool',planPool);store.set('habits',habits);store.set('routines',routines);store.set('moods',moods)}
 function esc(s=''){return s.replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]))}
 function fmtDate(){
   const d=new Date(); const wd=['日','一','二','三','四','五','六'][d.getDay()];
@@ -239,7 +296,7 @@ function switchView(id){
 }
 function toggleQuickAdd(){document.getElementById('quickAdd').classList.toggle('show')}
 function render(){
-  renderPlans(); renderLife(); renderArchive(); renderCalendar(); renderAnniversaries(); renderTodayAnniversary();
+  renderPlans(); renderLife(); renderArchive(); renderCalendar(); renderAnniversaries(); renderTodayAnniversary(); renderPlanPool(); renderTodayMood();
 }
 function renderPlans(){
   const mk = p => `<div class="row">
@@ -252,14 +309,45 @@ function renderPlans(){
   document.getElementById('planCount').textContent=`${done} / ${plans.length}`;
   document.getElementById('planListCount').textContent=`${plans.length} 项`;
 }
+
+function renderPlanPool(){
+  const box=document.getElementById('planPoolList'); if(!box)return;
+  document.getElementById('planPoolCount').textContent=planPool.length;
+  box.innerHTML=(planPool.map(p=>`<div class="row tap" onclick="openPlanPoolItem(${p.id})"><span>${esc(p.title)}</span><span class="muted">未安排 ›</span></div>`).join('')||'<div class="muted">Plan Pool 为空。</div>')
+  +`<div class="row"><button class="iconbtn" style="font-size:15px" onclick="openAddPlanPool()">＋ 添加到 Plan Pool</button></div>`;
+}
+function openAddPlanPool(){showSheet(`<div class="sheet-head"><h2>加入 Plan Pool</h2><button class="iconbtn" onclick="closeSheet()">×</button></div><div class="field"><label>想做什么？</label><input id="poolTitle"></div><button class="primary" onclick="savePlanPool()">保存</button>`)}
+function savePlanPool(){const t=document.getElementById('poolTitle').value.trim();if(!t)return;planPool.push({id:Date.now(),title:t});persist();closeSheet();render()}
+function openPlanPoolItem(id){const p=planPool.find(x=>x.id===id);if(!p)return;showSheet(`<div class="sheet-head"><h2>${esc(p.title)}</h2><button class="iconbtn" onclick="closeSheet()">×</button></div><button class="primary" onclick="schedulePoolItem(${id})">安排到今天</button><div style="height:10px"></div><button class="secondary" onclick="deletePoolItem(${id})">删除</button>`)}
+function schedulePoolItem(id){const p=planPool.find(x=>x.id===id);if(!p)return;plans.push({id:Date.now(),title:p.title,done:false,focus:true});planPool=planPool.filter(x=>x.id!==id);persist();closeSheet();render()}
+function deletePoolItem(id){planPool=planPool.filter(x=>x.id!==id);persist();closeSheet();render()}
+
+function openMood(){
+ const opts=[['开心','😊'],['平静','🙂'],['满足','😌'],['疲惫','😴'],['烦躁','😫'],['难过','😢'],['焦虑','😰'],['兴奋','🤩']];
+ showSheet(`<div class="sheet-head"><h2>心情打卡</h2><button class="iconbtn" onclick="closeSheet()">×</button></div><div class="mood-row">${opts.map(o=>`<button class="mood-btn" onclick="saveMood('${o[0]}','${o[1]}')"><span class="mood-emo">${o[1]}</span>${o[0]}</button>`).join('')}</div><div class="field"><label>一句话（可选）</label><textarea id="moodNote"></textarea></div>`);
+}
+function saveMood(label,emoji){const note=(document.getElementById('moodNote')?.value||'').trim(),now=new Date();moods.push({id:Date.now(),label,emoji,note,time:now.toTimeString().slice(0,5),date:localDateKey(now)});if(note)life.push({id:Date.now()+1,time:now.toTimeString().slice(0,5),text:note,type:'mood',moodLabel:label,moodEmoji:emoji});persist();closeSheet();render()}
+function renderTodayMood(){const el=document.getElementById('todayMoodLabel');if(!el)return;const arr=moods.filter(m=>m.date===localDateKey(new Date()));el.textContent=arr.length?`${arr[arr.length-1].emoji} ${arr[arr.length-1].label}`:'还没记录今日心情'}
+
+async function saveLifeWithPhotos(){
+ const t=(document.getElementById('lifeText')?.value||'').trim();
+ const fs=[...(document.getElementById('lifePhotos')?.files||[])];
+ if(!t&&!fs.length)return;
+ const ids=[]; for(const f of fs)ids.push(await PhotoDB.put(f));
+ const now=new Date();life.push({id:Date.now(),time:now.toTimeString().slice(0,5),text:t,type:'life',photoIds:ids});persist();closeSheet();await renderLife();
+}
+async function lifePhotoHtml(ids=[]){
+ const urls=[];for(const id of ids){if(!photoUrls[id]){const blob=await PhotoDB.get(id);if(blob)photoUrls[id]=URL.createObjectURL(blob)}if(photoUrls[id])urls.push(photoUrls[id])}
+ if(!urls.length)return'';if(urls.length===1)return`<img class="photo-large" src="${urls[0]}">`;return`<div class="photo-grid">${urls.map(u=>`<div class="photo-thumb"><img src="${u}"></div>`).join('')}</div>`;
+}
+
 function togglePlan(id){const p=plans.find(x=>x.id===id); p.done=!p.done; persist(); render()}
-function renderLife(){
-  document.getElementById('lifeFeed').innerHTML = life.slice().reverse().map(x=>`
-    <div class="life-item">
-      <div class="life-time">${esc(x.time||'此刻')}</div>
-      <div>${esc(x.text||'')}</div>
-      ${x.type==='drink'?'<div class="photo">饮品记录 · 可后续接照片抠图</div>':''}${x.type==='anniversary'?'<div class="muted" style="margin-top:6px">纪念日记录</div>':''}
-    </div>`).join('') || `<div class="muted">还没有记录。</div>`;
+async function renderLife(){
+  const el=document.getElementById('lifeFeed'),items=life.slice().reverse();let out='';
+  for(const x of items){
+    out+=`<div class="life-item"><div class="life-time">${esc(x.time||'此刻')}</div>${x.text?`<div>${esc(x.text)}</div>`:''}${await lifePhotoHtml(x.photoIds||[])}${x.type==='drink'?'<div class="photo">饮品记录</div>':''}${x.type==='anniversary'?'<div class="muted" style="margin-top:6px">纪念日记录</div>':''}${x.type==='mood'?`<div class="muted" style="margin-top:6px">${x.moodEmoji||''} ${x.moodLabel||''}</div>`:''}</div>`;
+  }
+  el.innerHTML=out||'<div class="muted">还没有记录。</div>';
 }
 function renderArchive(){
   document.getElementById('lifeStat').textContent=life.length;
@@ -286,8 +374,11 @@ function openAdd(type){
     <button class="primary" onclick="savePlan()">保存</button>`);
   if(type==='life') return showSheet(`
     <div class="sheet-head"><h2>记录此刻</h2><button class="iconbtn" onclick="closeSheet()">×</button></div>
-    <div class="field"><textarea id="lifeText" placeholder="想记点什么……"></textarea></div>
-    <button class="primary" onclick="saveLife()">发布</button>`);
+    <div class="field"><textarea id="lifeText" placeholder="一句话、几句话，或者只发照片……"></textarea></div>
+    <div class="field"><label>照片</label><input id="lifePhotos" type="file" accept="image/*" multiple></div>
+    <div class="section-note">照片保存在这台设备的浏览器里，不上传到 GitHub。</div>
+    <div style="height:12px"></div>
+    <button class="primary" onclick="saveLifeWithPhotos()">发布</button>`);
   if(type==='money') return showSheet(`
     <div class="sheet-head"><h2>记一笔</h2><button class="iconbtn" onclick="closeSheet()">×</button></div>
     <div class="field"><label>金额</label><input id="moneyAmount" inputmode="decimal" placeholder="0.00"></div>
@@ -446,31 +537,34 @@ function saveDrink(){
   persist(); closeSheet(); render();
 }
 function openRoutine(){
-  showSheet(`
-    <div class="sheet-head"><h2>Today Routine</h2><button class="iconbtn" onclick="closeSheet()">×</button></div>
-    <div class="muted">💼 上班日</div>
-    <hr>
-    <strong>Morning · 2 / 5</strong>
-    <div class="row"><span>✓ 起床</span></div>
-    <div class="row"><span>✓ 洗漱</span></div>
-    <div class="row"><span>○ 晨间护肤</span></div>
-    <div class="row"><span>○ 早餐</span></div>
-    <div class="row"><span>○ 出门</span></div>
-    <hr>
-    <button class="secondary" onclick="closeSheet()">完成 / 返回</button>`);
+ showSheet(`<div class="sheet-head"><h2>Routine</h2><button class="iconbtn" onclick="closeSheet()">×</button></div>${routines.map(r=>`<div class="card" style="margin-bottom:12px" onclick="openRoutineDetail(${r.id})"><div class="row"><div><strong>${esc(r.title)}</strong><div class="muted">${r.steps.length} 个步骤</div></div><span>›</span></div></div>`).join('')}<button class="secondary" onclick="addRoutine()">＋ 新建 Routine</button>`);
 }
+function openRoutineDetail(id){const r=routines.find(x=>x.id===id);if(!r)return;showSheet(`<div class="sheet-head"><h2>${esc(r.title)}</h2><button class="iconbtn" onclick="closeSheet()">×</button></div><div class="card">${r.steps.map(s=>`<div class="row"><div class="left"><button class="check" onclick="this.classList.toggle('done')"></button><span>${esc(s)}</span></div></div>`).join('')}</div><div style="height:12px"></div><button class="secondary" onclick="openRoutine()">返回</button>`)}
+function addRoutine(){showSheet(`<div class="sheet-head"><h2>新建 Routine</h2><button class="iconbtn" onclick="closeSheet()">×</button></div><div class="field"><label>名称</label><input id="routineTitle"></div><div class="field"><label>步骤（每行一个）</label><textarea id="routineSteps"></textarea></div><button class="primary" onclick="saveRoutine()">保存</button>`)}
+function saveRoutine(){const title=document.getElementById('routineTitle').value.trim(),steps=document.getElementById('routineSteps').value.split('\n').map(x=>x.trim()).filter(Boolean);if(!title)return;routines.push({id:Date.now(),title,steps});persist();openRoutine()}
 function openMySpace(){
-  showSheet(`
-    <div class="sheet-head"><h2>My Space</h2><button class="iconbtn" onclick="closeSheet()">×</button></div>
-    <div class="row"><span>🌱 Habit</span><span>›</span></div>
-    <div class="row"><span>🔄 Routine</span><span>›</span></div>
-    <div class="row" onclick="closeSheet();switchView('plan');setTimeout(()=>document.getElementById('anniversaryPreview')?.scrollIntoView({behavior:'smooth'}),50)"><span>♡ Anniversary</span><span>›</span></div>
-    <div class="row"><span>💰 Money</span><span>›</span></div>
-    <div class="row"><span>❤️ Health</span><span>›</span></div>
-    <div class="row"><span>📚 Knowledge</span><span>›</span></div>
-    <div class="row"><span>🔍 Search</span><span>›</span></div>
-    <div class="row"><span>⚙️ Settings</span><span>›</span></div>`);
+ showSheet(`<div class="sheet-head"><h2>My Space</h2><button class="iconbtn" onclick="closeSheet()">×</button></div>
+ <div class="row menu-row tap" onclick="openHabit()"><span>🌱 Habit</span><span>›</span></div>
+ <div class="row menu-row tap" onclick="openRoutine()"><span>🔄 Routine</span><span>›</span></div>
+ <div class="row menu-row tap" onclick="closeSheet();switchView('plan');setTimeout(()=>document.getElementById('anniversaryPreview')?.scrollIntoView({behavior:'smooth'}),50)"><span>♡ Anniversary</span><span>›</span></div>
+ <div class="row menu-row tap" onclick="openMoney()"><span>💰 Money</span><span>›</span></div>
+ <div class="row menu-row tap" onclick="openHealth()"><span>❤️ Health</span><span>›</span></div>
+ <div class="row menu-row tap" onclick="openKnowledge()"><span>📚 Knowledge</span><span>›</span></div>
+ <div class="row menu-row tap" onclick="openSearch()"><span>🔍 Search</span><span>›</span></div>
+ <div class="row menu-row tap" onclick="openSettings()"><span>⚙️ Settings</span><span>›</span></div>`);
 }
+function openHabit(){
+ showSheet(`<div class="sheet-head"><h2>Habit</h2><button class="iconbtn" onclick="closeSheet()">×</button></div><div class="card">${habits.map(h=>`<div class="row tap" onclick="toggleHabit(${h.id})"><div><strong>${esc(h.title)}</strong><div class="muted">${h.type==='fixed'?'固定型':h.type==='count'?'次数型':'弹性周期型'}</div></div><span class="badge">${h.type==='count'?`${h.count}/${h.goal}`:(h.done?'已完成':'打卡')}</span></div>`).join('')}</div><div style="height:12px"></div><button class="secondary" onclick="addHabit()">＋ 新建 Habit</button>`);
+}
+function toggleHabit(id){const h=habits.find(x=>x.id===id);if(!h)return;if(h.type==='count')h.count=Math.min((h.count||0)+1,h.goal||999);else h.done=!h.done;persist();openHabit();render()}
+function addHabit(){showSheet(`<div class="sheet-head"><h2>新建 Habit</h2><button class="iconbtn" onclick="closeSheet()">×</button></div><div class="field"><label>名称</label><input id="habitTitle"></div><div class="field"><label>类型</label><select id="habitType"><option value="fixed">固定型</option><option value="count">次数型</option><option value="flex">弹性周期型</option></select></div><button class="primary" onclick="saveHabit()">保存</button>`)}
+function saveHabit(){const title=document.getElementById('habitTitle').value.trim(),type=document.getElementById('habitType').value;if(!title)return;habits.push({id:Date.now(),title,type,done:false,goal:type==='count'?3:undefined,count:0});persist();openHabit();render()}
+function openMoney(){const total=money.reduce((a,b)=>a+(Number(b.amount)||0),0);showSheet(`<div class="sheet-head"><h2>Money</h2><button class="iconbtn" onclick="closeSheet()">×</button></div><div class="card"><div class="row"><span>已记录支出</span><strong>¥${total.toFixed(2)}</strong></div><div class="row"><span>记录数</span><span>${money.length}</span></div></div><div style="height:12px"></div><button class="primary" onclick="openAdd('money')">＋ 记一笔</button>`)}
+function openHealth(){const latest=weight[weight.length-1];showSheet(`<div class="sheet-head"><h2>Health</h2><button class="iconbtn" onclick="closeSheet()">×</button></div><div class="card"><div class="row"><span>最新体重</span><strong>${latest?latest.value+' kg':'暂无'}</strong></div><div class="row"><span>生理期</span><span class="muted">入口已接通，完整周期页后续补齐</span></div></div><div style="height:12px"></div><button class="primary" onclick="openAdd('weight')">记录体重</button>`)}
+function openKnowledge(){showSheet(`<div class="sheet-head"><h2>Knowledge</h2><button class="iconbtn" onclick="closeSheet()">×</button></div><div class="section-note">入口已修复；完整知识库页面后续继续开发。</div>`)}
+function openSearch(){showSheet(`<div class="sheet-head"><h2>Search</h2><button class="iconbtn" onclick="closeSheet()">×</button></div><div class="field"><input id="globalSearch" placeholder="搜索 Life / Plan" oninput="runSearch(this.value)"></div><div id="searchResults" class="card"><div class="muted">输入关键词开始搜索。</div></div>`)}
+function runSearch(q){q=q.trim().toLowerCase();const box=document.getElementById('searchResults');if(!q){box.innerHTML='<div class="muted">输入关键词开始搜索。</div>';return;}const r=[];plans.filter(x=>x.title.toLowerCase().includes(q)).forEach(x=>r.push(`Plan · ${esc(x.title)}`));life.filter(x=>(x.text||'').toLowerCase().includes(q)).forEach(x=>r.push(`Life · ${esc(x.text)}`));box.innerHTML=r.length?r.map(x=>`<div class="row"><span>${x}</span></div>`).join(''):'<div class="muted">没有找到。</div>'}
+function openSettings(){showSheet(`<div class="sheet-head"><h2>Settings</h2><button class="iconbtn" onclick="closeSheet()">×</button></div><div class="row tap" onclick="openBackup()"><span>数据与备份</span><span>›</span></div><div class="row"><span>版本</span><span class="muted">v0.3</span></div>`)}
 function openFocusSheet(planId=null){
   const p=planId?plans.find(x=>x.id===planId):null;
   showSheet(`
