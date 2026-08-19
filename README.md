@@ -1,3 +1,3 @@
-# My Life OS v1.6
+# My Life OS v1.7
 
-Adds Health trends, Money budgets/categories/receipts/summary, and Knowledge notes with multiple photos.
+Adds Life multi-photo upload, location/tags, monthly photo calendar, and Drinks Calendar/Gallery/Stats.
