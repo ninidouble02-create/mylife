@@ -1,3 +1,3 @@
-# My Life OS v2.0 Search + Backup
+# My Life OS v2.1 Archive Monthly
 
-Adds global cross-module search plus JSON export/import backup and restore.
+Archive redesigned as a monthly magazine: Life/photos, Plan completion, Habit check-ins, Focus trend, Mood calendar, Money summary, Health snapshot, Drinks and monthly notes.
