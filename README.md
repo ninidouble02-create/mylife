@@ -1,9 +1,8 @@
-# My Life OS v2.2 Stability + Deepening
+# My Life OS 3.0 — Warm Minimal
 
-Quality pass over the existing app:
-- Money entries now open as editable detail pages, with receipt preview.
-- Health period tracking supports optional end date and cycle summary.
-- Habit detail adds week/month counts, streak and recent check-ins.
-- My Space exposes Drinks and Search directly.
-- Backup page includes a compact data-integrity count check.
-- Existing Plan/Focus/Life/Archive/Search/Backup functionality is retained.
+This is the new visual edition based on the stable v2.2 app.
+
+- Warm white + black + oatmeal-gray palette
+- Cleaner, lighter cards and controls
+- Existing v2.2 modules, data model, and interactions retained
+- Intended as a new app/version while keeping v2.2 as the stable backup
