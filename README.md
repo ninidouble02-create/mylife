@@ -1,8 +1,14 @@
-# My Life OS 3.0 — Warm Minimal
+# My Life OS 3.0 — Rebuilt UI
 
-This is the new visual edition based on the stable v2.2 app.
+A new interface layer built from the stable v2.2 functional baseline.
 
-- Warm white + black + oatmeal-gray palette
-- Cleaner, lighter cards and controls
-- Existing v2.2 modules, data model, and interactions retained
-- Intended as a new app/version while keeping v2.2 as the stable backup
+## Preserved from v2.2
+Today, Plan, Plan Pool, Anniversary, Routine, Habit, Memo, Focus, Life/social feed,
+photo wall, Mood, Health, Money/budget/receipts, Knowledge/photos, Drinks,
+global Search, Backup/Restore, Archive and My Space.
+
+## New UI
+Warm ivory background, black typography/actions, oatmeal-gray cards, restrained emoji,
+new navigation styling, new header hierarchy, lighter sheets/forms and unified components.
+
+The data model and existing v2.2 interaction handlers are intentionally retained.
